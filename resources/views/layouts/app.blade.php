@@ -36,11 +36,7 @@
                     <span class="text-white font-bold text-xl">Pengaduan Polisi</span>
                 </a>
                 
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('chatbot.index') }}" class="text-white hover:text-gray-200 transition">
-                        <i class="fas fa-comments mr-2"></i>Chatbot
-                    </a>
-                    
+                <div class="flex items-center space-x-4">              
                     @auth
                         @if(auth()->user()->isPetugas())
                             <a href="{{ route('petugas.dashboard') }}" class="text-white hover:text-gray-200 transition">

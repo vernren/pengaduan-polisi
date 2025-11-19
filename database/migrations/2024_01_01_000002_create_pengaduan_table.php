@@ -17,7 +17,6 @@ return new class extends Migration
             $table->date('tanggal_kejadian')->nullable();
             $table->enum('kategori', ['pencurian', 'kekerasan', 'narkoba', 'lalu_lintas', 'lainnya']);
             $table->enum('status', ['pending', 'diproses', 'selesai', 'ditolak'])->default('pending');
-            $table->enum('prioritas', ['rendah', 'sedang', 'tinggi'])->default('sedang');
             $table->text('tanggapan')->nullable();
             $table->foreignId('petugas_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();

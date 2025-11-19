@@ -32,7 +32,6 @@ class PengaduanController extends Controller
             'lokasi' => 'required|string|max:255',
             'tanggal_kejadian' => 'required|date',
             'kategori' => 'required|in:pencurian,kekerasan,narkoba,lalu_lintas,lainnya',
-            'prioritas' => 'required|in:rendah,sedang,tinggi',
             'foto.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -43,7 +42,6 @@ class PengaduanController extends Controller
             'lokasi' => $validated['lokasi'],
             'tanggal_kejadian' => $validated['tanggal_kejadian'],
             'kategori' => $validated['kategori'],
-            'prioritas' => $validated['prioritas'],
             'status' => 'pending',
         ]);
 

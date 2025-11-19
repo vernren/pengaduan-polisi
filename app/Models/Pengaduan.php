@@ -10,7 +10,7 @@ class Pengaduan extends Model
 
     protected $fillable = [
         'user_id', 'judul', 'deskripsi', 'lokasi', 'tanggal_kejadian',
-        'kategori', 'status', 'prioritas', 'tanggapan', 'petugas_id'
+        'kategori', 'status', 'tanggapan', 'petugas_id'
     ];
 
     protected $casts = [
