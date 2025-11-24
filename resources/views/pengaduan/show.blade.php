@@ -22,20 +22,29 @@
 
             <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
                 <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-tag mr-2"></i>Kategori</p>
-                    <p class="font-semibold text-gray-800">{{ ucfirst($pengaduan->kategori) }}</p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-layer-group mr-2"></i>Kategori</p>
+                    <p class="font-semibold text-gray-800">{{ $pengaduan->getKategoriLabel() }}</p>
                 </div>
                 <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-exclamation-triangle mr-2"></i>Prioritas</p>
-                    <p class="font-semibold text-gray-800">{{ ucfirst($pengaduan->prioritas) }}</p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-tag mr-2"></i>Sub Kategori</p>
+                    <p class="font-semibold text-gray-800">{{ $pengaduan->getSubKategoriLabel() }}</p>
                 </div>
-                <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</p>
-                    <p class="font-semibold text-gray-800">{{ $pengaduan->lokasi }}</p>
-                </div>
-                <div>
+                <div class="col-span-2">
                     <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal Kejadian</p>
                     <p class="font-semibold text-gray-800">{{ $pengaduan->tanggal_kejadian->format('d M Y') }}</p>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi Kejadian</h3>
+                <p class="text-gray-700 mb-3">{{ $pengaduan->lokasi }}</p>
+                
+                <!-- Leaflet map (will show fallback message if coords missing) -->
+                <div id="mapContainer" class="w-full h-80 rounded-lg border border-gray-300 bg-gray-50 overflow-hidden">
+                    <div id="map" class="w-full h-full"></div>
+                    <div id="mapFallback" class="hidden p-4">
+                        <p class="text-gray-600">Koordinat lokasi tidak tersedia. Tidak dapat menampilkan peta.</p>
+                    </div>
                 </div>
             </div>
 
@@ -134,4 +143,68 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<!-- Leaflet (Open-source map) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Use Blade's JSON encoding to safely pass PHP values to JS
+    const lat = @json($pengaduan->latitude);
+    const lng = @json($pengaduan->longitude);
+    const title = @json($pengaduan->judul);
+    const alamat = @json($pengaduan->lokasi);
+
+    const mapEl = document.getElementById('map');
+    const mapFallback = document.getElementById('mapFallback');
+
+    // If coordinates are not present or invalid, hide map and show fallback
+    if (lat === null || lng === null || isNaN(Number(lat)) || isNaN(Number(lng))) {
+        // hide map div content and show fallback message
+        mapEl.style.display = 'none';
+        mapFallback.classList.remove('hidden');
+        return;
+    }
+
+    // Initialize Leaflet map
+    const map = L.map('map', {
+        center: [Number(lat), Number(lng)],
+        zoom: 15,
+        scrollWheelZoom: true
+    });
+
+    // Tiles (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Marker + popup
+    const marker = L.marker([Number(lat), Number(lng)]).addTo(map);
+    const popupHtml = `
+        <div class="text-sm">
+            <strong>${escapeHtml(title)}</strong><br>
+            <span>${escapeHtml(alamat)}</span>
+        </div>
+    `;
+    marker.bindPopup(popupHtml);
+
+    // Open popup by default
+    marker.openPopup();
+});
+
+// simple escape for popup content
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+</script>
 @endsection

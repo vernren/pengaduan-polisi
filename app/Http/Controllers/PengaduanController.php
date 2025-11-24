@@ -1,4 +1,5 @@
 <?php
+// app/Http/Controllers/PengaduanController.php
 
 namespace App\Http\Controllers;
 
@@ -28,22 +29,37 @@ class PengaduanController extends Controller
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'lokasi' => 'required|string|max:255',
-            'tanggal_kejadian' => 'required|date',
-            'kategori' => 'required|in:pencurian,kekerasan,narkoba,lalu_lintas,lainnya',
-            'prioritas' => 'required|in:rendah,sedang,tinggi',
+            'deskripsi' => 'required|string|min:50',
+            'lokasi' => 'required|string|max:500',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'tanggal_kejadian' => 'required|date|before_or_equal:today',
+            'kategori_utama' => 'required|in:informasi,pengaduan,permintaan',
+            'sub_kategori' => 'required|string|max:100',
             'foto.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'deskripsi.min' => 'Deskripsi minimal 50 karakter',
+            'tanggal_kejadian.before_or_equal' => 'Tanggal kejadian tidak boleh di masa depan',
+            'latitude.required' => 'Silakan pilih lokasi pada peta',
+            'longitude.required' => 'Silakan pilih lokasi pada peta',
         ]);
+
+        // Validasi sub kategori sesuai kategori utama
+        $kategoriOptions = Pengaduan::getKategoriOptions();
+        if (!isset($kategoriOptions[$validated['kategori_utama']]['sub'][$validated['sub_kategori']])) {
+            return back()->withErrors(['sub_kategori' => 'Sub kategori tidak valid'])->withInput();
+        }
 
         $pengaduan = Pengaduan::create([
             'user_id' => auth()->id(),
             'judul' => $validated['judul'],
             'deskripsi' => $validated['deskripsi'],
             'lokasi' => $validated['lokasi'],
+            'latitude' => $validated['latitude'],
+            'longitude' => $validated['longitude'],
             'tanggal_kejadian' => $validated['tanggal_kejadian'],
-            'kategori' => $validated['kategori'],
-            'prioritas' => $validated['prioritas'],
+            'kategori_utama' => $validated['kategori_utama'],
+            'sub_kategori' => $validated['sub_kategori'],
             'status' => 'pending',
         ]);
 

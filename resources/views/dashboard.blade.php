@@ -1,4 +1,4 @@
-<!-- resources/views/dashboard.blade.php -->
+resources/views/dashboard.blade.php
 @extends('layouts.app')
 
 @section('title', 'Dashboard - Pengaduan Polisi')

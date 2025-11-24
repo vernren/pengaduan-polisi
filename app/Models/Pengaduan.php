@@ -1,4 +1,5 @@
 <?php
+// app/Models/Pengaduan.php
 
 namespace App\Models;
 
@@ -9,13 +10,56 @@ class Pengaduan extends Model
     protected $table = 'pengaduan';
 
     protected $fillable = [
-        'user_id', 'judul', 'deskripsi', 'lokasi', 'tanggal_kejadian',
-        'kategori', 'status', 'prioritas', 'tanggapan', 'petugas_id'
+        'user_id', 'judul', 'deskripsi', 'lokasi', 'latitude', 'longitude',
+        'tanggal_kejadian', 'kategori_utama', 'sub_kategori', 
+        'status', 'tanggapan', 'petugas_id'
     ];
 
     protected $casts = [
         'tanggal_kejadian' => 'date',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
+
+    // Definisi kategori dan sub kategori
+    public static function getKategoriOptions()
+    {
+        return [
+            'informasi' => [
+                'label' => 'Informasi',
+                'sub' => [
+                    'pembuatan_sim' => 'Pembuatan SIM',
+                    'perpanjangan_sim' => 'Perpanjangan SIM',
+                    'pembuatan_skck' => 'Pembuatan SKCK',
+                    'laporan_kehilangan' => 'Laporan Kehilangan',
+                    'surat_keterangan' => 'Surat Keterangan',
+                    'izin_keramaian' => 'Izin Keramaian',
+                    'informasi_umum' => 'Informasi Umum',
+                ]
+            ],
+            'pengaduan' => [
+                'label' => 'Pengaduan',
+                'sub' => [
+                    'kecelakaan_lalu_lintas' => 'Kecelakaan Lalu Lintas',
+                    'pencurian' => 'Pencurian',
+                    'penipuan' => 'Penipuan',
+                    'kekerasan' => 'Kekerasan/Penganiayaan',
+                    'narkoba' => 'Narkoba/NAPZA',
+                    'perjudian' => 'Perjudian',
+                    'pelanggaran_lalu_lintas' => 'Pelanggaran Lalu Lintas',
+                    'gangguan_kamtibmas' => 'Gangguan Kamtibmas',
+                    'kejahatan_siber' => 'Kejahatan Siber',
+                    'pengaduan_lainnya' => 'Lainnya',
+                ]
+            ],
+            'permintaan' => [
+                'label' => 'Permintaan',
+                'sub' => [
+                    'pengawalan' => 'Pengawalan',
+                ]
+            ]
+        ];
+    }
 
     public function user()
     {
@@ -32,7 +76,6 @@ class Pengaduan extends Model
         return $this->hasMany(FotoPengaduan::class);
     }
 
-    // ✅ Versi aman untuk PHP 7
     public function getStatusBadgeClass()
     {
         switch ($this->status) {
@@ -63,5 +106,20 @@ class Pengaduan extends Model
             default:
                 return 'Unknown';
         }
+    }
+
+    public function getKategoriLabel()
+    {
+        $kategori = self::getKategoriOptions();
+        return $kategori[$this->kategori_utama]['label'] ?? ucfirst($this->kategori_utama);
+    }
+
+    public function getSubKategoriLabel()
+    {
+        $kategori = self::getKategoriOptions();
+        if (isset($kategori[$this->kategori_utama]['sub'][$this->sub_kategori])) {
+            return $kategori[$this->kategori_utama]['sub'][$this->sub_kategori];
+        }
+        return ucfirst(str_replace('_', ' ', $this->sub_kategori));
     }
 }

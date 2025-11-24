@@ -109,8 +109,6 @@
                                 <span><i class="fas fa-calendar mr-1"></i>{{ $item->created_at->format('d M Y, H:i') }}</span>
                                 <span><i class="fas fa-map-marker-alt mr-1"></i>{{ $item->lokasi }}</span>
                                 <span><i class="fas fa-tag mr-1"></i>{{ ucfirst($item->kategori) }}</span>
-                                <span class="font-semibold {{ $item->prioritas == 'tinggi' ? 'text-red-600' : ($item->prioritas == 'sedang' ? 'text-yellow-600' : 'text-green-600') }}">
-                                    <i class="fas fa-exclamation-triangle mr-1"></i>Prioritas {{ ucfirst($item->prioritas) }}
                                 </span>
                             </div>
                         </div>

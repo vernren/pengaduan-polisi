@@ -1,4 +1,3 @@
-<!-- resources/views/petugas/show.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Detail Pengaduan - Petugas')
@@ -23,23 +22,34 @@
 
             <div class="grid grid-cols-2 gap-4 mb-6 text-sm bg-gray-50 p-4 rounded-lg">
                 <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-tag mr-2"></i>Kategori</p>
-                    <p class="font-semibold text-gray-800">{{ ucfirst($pengaduan->kategori) }}</p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-layer-group mr-2"></i>Kategori Utama</p>
+                    <p class="font-semibold text-gray-800">{{ $pengaduan->getKategoriLabel() }}</p>
                 </div>
                 <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-exclamation-triangle mr-2"></i>Prioritas</p>
-                    <p class="font-semibold {{ $pengaduan->prioritas == 'tinggi' ? 'text-red-600' : ($pengaduan->prioritas == 'sedang' ? 'text-yellow-600' : 'text-green-600') }}">
-                        {{ ucfirst($pengaduan->prioritas) }}
-                    </p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-tag mr-2"></i>Sub Kategori</p>
+                    <p class="font-semibold text-gray-800">{{ $pengaduan->getSubKategoriLabel() }}</p>
                 </div>
-                <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</p>
-                    <p class="font-semibold text-gray-800">{{ $pengaduan->lokasi }}</p>
-                </div>
-                <div>
+                <div class="col-span-2">
                     <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal Kejadian</p>
                     <p class="font-semibold text-gray-800">{{ $pengaduan->tanggal_kejadian->format('d M Y') }}</p>
                 </div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi Kejadian</h3>
+                <p class="text-gray-700 mb-3">{{ $pengaduan->lokasi }}</p>
+                <div class="flex items-center text-sm text-gray-600 mb-3">
+                    <i class="fas fa-map-pin mr-2"></i>
+                    <span>Koordinat: {{ $pengaduan->latitude }}, {{ $pengaduan->longitude }}</span>
+                    <a href="https://www.google.com/maps?q={{ $pengaduan->latitude }},{{ $pengaduan->longitude }}" 
+                       target="_blank" 
+                       class="ml-3 text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-external-link-alt mr-1"></i>Buka di Google Maps
+                    </a>
+                </div>
+                
+                <!-- Google Maps Display -->
+                <div id="map" class="w-full h-80 rounded-lg border border-gray-300"></div>
             </div>
 
             <div class="mb-6">
@@ -100,30 +110,11 @@
                     <p class="text-sm text-gray-500 mt-2">Tanggapan ini akan dilihat oleh pelapor</p>
                 </div>
 
-                <div class="flex space-x-4">
-                    <button type="submit" class="flex-1 gradient-bg text-white py-3 rounded-lg hover:opacity-90 transition font-semibold">
-                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
-                    </button>
-                </div>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg hover:opacity-90 transition font-semibold">
+                    <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                </button>
             </form>
         </div>
-
-        @if($pengaduan->tanggapan)
-            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-                <h3 class="font-semibold text-blue-900 mb-3 flex items-center">
-                    <i class="fas fa-history mr-2"></i>Tanggapan Sebelumnya
-                </h3>
-                <p class="text-blue-800 leading-relaxed mb-3">{{ $pengaduan->tanggapan }}</p>
-                @if($pengaduan->petugas)
-                    <div class="flex items-center text-sm text-blue-600 pt-3 border-t border-blue-200">
-                        <i class="fas fa-user-shield mr-2"></i>
-                        <span>{{ $pengaduan->petugas->name }}</span>
-                        <span class="mx-2">•</span>
-                        <span>{{ $pengaduan->updated_at->format('d M Y, H:i') }}</span>
-                    </div>
-                @endif
-            </div>
-        @endif
     </div>
 
     <!-- Sidebar -->
@@ -192,17 +183,49 @@
                 @endif
             </div>
         </div>
-
-        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <p class="text-sm text-purple-800 font-semibold mb-2">
-                <i class="fas fa-info-circle mr-2"></i>Catatan Penting
-            </p>
-            <ul class="text-xs text-purple-700 space-y-1">
-                <li>• Prioritas tinggi harus ditangani dalam 24 jam</li>
-                <li>• Selalu berikan tanggapan yang jelas</li>
-                <li>• Update status secara berkala</li>
-            </ul>
-        </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<!-- Leaflet (Open-source) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const lat = @json($pengaduan->latitude);
+    const lng = @json($pengaduan->longitude);
+    const title = @json($pengaduan->judul);
+    const alamat = @json($pengaduan->lokasi);
+
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    const hasValidCoords = lat !== null && lng !== null && lat !== '' && lng !== '' &&
+        Number.isFinite(Number(lat)) && Number.isFinite(Number(lng));
+
+    if (!hasValidCoords) {
+        mapEl.innerHTML = '<div class="flex items-center justify-center h-full"><p class="text-gray-600">Koordinat tidak tersedia. Tidak dapat menampilkan peta.</p></div>';
+        return;
+    }
+
+    const nlat = Number(lat);
+    const nlng = Number(lng);
+
+    const map = L.map('map', { center: [nlat, nlng], zoom: 15, scrollWheelZoom: true });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+    const popupHtml = `<div style="min-width:160px"><strong>${esc(title)}</strong><div style="font-size:13px;color:#444">${esc(alamat||'')}</div><div style="font-size:12px;color:#666;margin-top:6px">Koordinat: ${nlat}, ${nlng}</div></div>`;
+
+    const marker = L.marker([nlat, nlng]).addTo(map);
+    marker.bindPopup(popupHtml).openPopup();
+
+    L.control.scale().addTo(map);
+});
+</script>
 @endsection

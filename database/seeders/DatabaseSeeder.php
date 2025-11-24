@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'petugas',
         ]);
 
-        // === MASYARAKAT ===
+        // === MASYARAKAT === 
         User::create([
             'name' => 'Budi Santoso',
             'email' => 'budi@gmail.com',
@@ -37,76 +37,76 @@ class DatabaseSeeder extends Seeder
         // === FAQ SEED DATA ===
         $faqs = [
             [
-                'pertanyaan' => 'Bagaimana cara membuat laporan pengaduan?',
-                'jawaban' => 'Anda dapat membuat laporan pengaduan dengan login terlebih dahulu, kemudian klik menu "Buat Pengaduan Baru". Isi formulir dengan lengkap termasuk judul, deskripsi, lokasi, tanggal kejadian, dan lampirkan foto jika diperlukan. Setelah selesai, klik "Kirim Pengaduan".',
+                'pertanyaan' => 'Bagaimana cara membuat SIM?',
+                'jawaban' => 'Untuk membuat SIM, Anda perlu: 1) Datang ke Satpas terdekat, 2) Membawa KTP asli dan fotokopi, 3) Mengisi formulir pendaftaran, 4) Melakukan tes kesehatan, 5) Mengikuti ujian teori dan praktik, 6) Foto dan tanda tangan digital, 7) Pembayaran biaya administrasi. Proses biasanya memakan waktu 1 hari kerja.',
+                'kategori' => 'informasi',
+                'keywords' => 'sim,pembuatan,cara,persyaratan',
+            ],
+            [
+                'pertanyaan' => 'Apa saja persyaratan membuat SKCK?',
+                'jawaban' => 'Persyaratan SKCK: 1) KTP asli dan fotokopi, 2) Kartu Keluarga asli dan fotokopi, 3) Akta Kelahiran/Ijazah, 4) Pas foto berwarna ukuran 4x6 (6 lembar), 5) Sidik jari, 6) Surat pengantar dari RT/RW (untuk keperluan tertentu). Biaya administrasi Rp 30.000. Proses 3-7 hari kerja.',
+                'kategori' => 'informasi',
+                'keywords' => 'skck,persyaratan,dokumen,cara',
+            ],
+            [
+                'pertanyaan' => 'Bagaimana cara melaporkan kecelakaan lalu lintas?',
+                'jawaban' => 'Langkah-langkah: 1) Amankan lokasi kejadian, 2) Hubungi 110 jika ada korban, 3) Jangan pindahkan kendaraan sebelum polisi datang, 4) Ambil foto/video kondisi kejadian, 5) Catat data saksi jika ada, 6) Tunggu petugas untuk membuat laporan kecelakaan. Anda juga bisa membuat laporan online melalui sistem ini.',
                 'kategori' => 'pengaduan',
-                'keywords' => 'cara,membuat,laporan,pengaduan,buat',
+                'keywords' => 'kecelakaan,lalu lintas,laporan,cara',
             ],
             [
-                'pertanyaan' => 'Berapa lama proses pengaduan saya?',
-                'jawaban' => 'Proses pengaduan biasanya memakan waktu 3-7 hari kerja tergantung pada tingkat kesulitan dan prioritas kasus. Untuk kasus dengan prioritas tinggi, kami akan berusaha menangani lebih cepat. Anda dapat memantau status pengaduan Anda secara real-time di halaman "Riwayat Pengaduan".',
+                'pertanyaan' => 'Bagaimana cara meminta pengawalan dari polisi?',
+                'jawaban' => 'Untuk mengajukan permohonan pengawalan: 1) Buat pengaduan melalui sistem ini dengan kategori "Permintaan - Pengawalan", 2) Jelaskan detail acara (tanggal, waktu, lokasi, jumlah peserta), 3) Lampirkan surat permohonan resmi jika untuk organisasi/instansi, 4) Tunggu konfirmasi dari petugas maksimal 3 hari kerja, 5) Koordinasi lebih lanjut dengan petugas yang ditunjuk.',
+                'kategori' => 'permintaan',
+                'keywords' => 'pengawalan,permintaan,cara,prosedur',
+            ],
+            [
+                'pertanyaan' => 'Apa yang harus dilakukan jika menjadi korban pencurian?',
+                'jawaban' => 'Langkah yang harus dilakukan: 1) Segera hubungi 110 atau kantor polisi terdekat, 2) Jangan sentuh barang bukti di TKP, 3) Catat ciri-ciri pelaku jika melihat, 4) Buat laporan kehilangan melalui sistem ini atau langsung ke polsek, 5) Siapkan dokumen kepemilikan barang yang hilang, 6) Ikuti perkembangan penyelidikan melalui sistem.',
                 'kategori' => 'pengaduan',
-                'keywords' => 'lama,proses,waktu,durasi',
+                'keywords' => 'pencurian,korban,laporan,kehilangan',
             ],
             [
-                'pertanyaan' => 'Apakah saya bisa membuat pengaduan tanpa login?',
-                'jawaban' => 'Tidak, Anda harus mendaftar dan login terlebih dahulu untuk membuat pengaduan. Ini untuk memastikan keamanan data, validitas laporan, dan memudahkan kami menghubungi Anda jika diperlukan klarifikasi lebih lanjut.',
-                'kategori' => 'akun',
-                'keywords' => 'login,daftar,tanpa,akun',
+                'pertanyaan' => 'Bagaimana cara memperpanjang SIM yang sudah habis masa berlaku?',
+                'jawaban' => 'Perpanjangan SIM: 1) Datang ke Satpas terdekat maksimal 30 hari sebelum atau setelah masa berlaku habis, 2) Bawa SIM lama, KTP asli dan fotokopi, 3) Isi formulir perpanjangan, 4) Tes kesehatan sederhana, 5) Foto dan tanda tangan digital, 6) Bayar biaya perpanjangan. Proses cepat, sekitar 1-2 jam. Jika telat lebih dari 1 tahun, harus mengulang tes dari awal.',
+                'kategori' => 'informasi',
+                'keywords' => 'sim,perpanjangan,habis,cara',
             ],
             [
-                'pertanyaan' => 'Dokumen apa yang diperlukan untuk membuat pengaduan?',
-                'jawaban' => 'Dokumen yang diperlukan: 1) NIK (Nomor Induk Kependudukan) yang sudah terdaftar di akun Anda, 2) Deskripsi detail kejadian, 3) Foto atau bukti pendukung jika ada, 4) Informasi lokasi dan waktu kejadian yang akurat.',
+                'pertanyaan' => 'Bagaimana melaporkan tindak kekerasan?',
+                'jawaban' => 'Jika Anda atau orang lain menjadi korban kekerasan: 1) Segera hubungi 110 untuk bantuan darurat, 2) Cari tempat aman, 3) Dokumentasikan luka-luka dengan foto, 4) Segera lakukan visum et repertum di rumah sakit, 5) Buat laporan polisi dengan membawa hasil visum, 6) Ceritakan kronologi dengan jelas dan lengkap. Polisi akan melakukan penyelidikan dan penangkapan pelaku.',
                 'kategori' => 'pengaduan',
-                'keywords' => 'dokumen,persyaratan,butuh,diperlukan',
-            ],
-            [
-                'pertanyaan' => 'Bagaimana cara melihat status pengaduan saya?',
-                'jawaban' => 'Login ke akun Anda, lalu klik menu "Riwayat Pengaduan" di bagian atas atau dari Dashboard. Di sana Anda dapat melihat semua pengaduan yang pernah Anda buat beserta status terkini (Menunggu, Diproses, Selesai, atau Ditolak).',
-                'kategori' => 'pengaduan',
-                'keywords' => 'status,lihat,cek,pantau',
-            ],
-            [
-                'pertanyaan' => 'Apa yang harus saya lakukan jika kehilangan barang?',
-                'jawaban' => 'Segera buat laporan kehilangan melalui sistem ini. Pilih kategori "Pencurian", jelaskan detail barang yang hilang, lokasi dan waktu kejadian. Lampirkan foto barang jika ada. Untuk kasus pencurian kendaraan, hubungi juga nomor darurat 110 untuk penanganan lebih cepat.',
-                'kategori' => 'kehilangan',
-                'keywords' => 'hilang,barang,kehilangan,pencurian',
+                'keywords' => 'kekerasan,penganiayaan,korban,laporan',
             ],
             [
                 'pertanyaan' => 'Nomor telepon darurat polisi berapa?',
-                'jawaban' => 'Nomor darurat polisi adalah 110. Hubungi nomor ini untuk situasi darurat yang memerlukan penanganan segera seperti kejahatan yang sedang terjadi, kecelakaan serius, atau ancaman nyawa.',
-                'kategori' => 'kontak',
-                'keywords' => 'telepon,darurat,nomor,110,hubungi',
+                'jawaban' => 'Nomor darurat polisi adalah 110. Hubungi nomor ini untuk: kecelakaan serius, kejahatan yang sedang terjadi, ancaman nyawa, situasi darurat lainnya. Layanan 24/7 gratis. Untuk hal non-darurat, silakan buat laporan melalui sistem online ini atau datang langsung ke polsek terdekat.',
+                'kategori' => 'informasi',
+                'keywords' => 'telepon,darurat,110,nomor,kontak',
+            ],
+            [
+                'pertanyaan' => 'Bagaimana cara melaporkan kejahatan siber/online?',
+                'jawaban' => 'Laporan kejahatan siber: 1) Screenshot semua bukti percakapan/transaksi, 2) Simpan nomor rekening/kontak pelaku, 3) Buat laporan melalui sistem ini dengan kategori "pengaduan - Kejahatan Siber", 4) Lampirkan semua bukti digital, 5) Atau datang langsung ke Unit Cyber Crime di Polda/Polres setempat, 6) Jangan hapus bukti di perangkat Anda sampai kasus selesai.',
+                'kategori' => 'pengaduan',
+                'keywords' => 'siber,cyber,online,penipuan,internet',
+            ],
+            [
+                'pertanyaan' => 'Apakah bisa membuat laporan kehilangan untuk klaim asuransi?',
+                'jawaban' => 'Ya, bisa. Untuk klaim asuransi: 1) Buat laporan kehilangan melalui sistem ini dengan kategori "Informasi - Laporan Kehilangan", 2) Atau datang langsung ke polsek untuk membuat surat kehilangan, 3) Jelaskan detail barang yang hilang dan kronologinya, 4) Anda akan mendapat surat keterangan kehilangan resmi dari kepolisian, 5) Surat ini bisa digunakan untuk klaim asuransi, pengurusan dokumen baru, dll.',
+                'kategori' => 'informasi',
+                'keywords' => 'kehilangan,laporan,asuransi,surat keterangan',
+            ],
+            [
+                'pertanyaan' => 'Berapa lama proses penanganan pengaduan?',
+                'jawaban' => 'Waktu proses bervariasi tergantung jenis pengaduan: Informasi (SIM, SKCK) = 1-7 hari, pengaduan ringan = 7-14 hari, pengaduan serius = 14-30 hari atau lebih (tergantung penyelidikan), Permintaan pengawalan = 3-7 hari. Anda dapat memantau status pengaduan secara real-time melalui dashboard. Petugas akan memberikan update berkala.',
+                'kategori' => 'informasi',
+                'keywords' => 'lama,proses,waktu,durasi',
             ],
             [
                 'pertanyaan' => 'Apakah laporan saya bersifat rahasia?',
-                'jawaban' => 'Ya, semua laporan pengaduan bersifat rahasia dan hanya dapat diakses oleh Anda dan petugas berwenang. Data pribadi Anda dilindungi sesuai dengan undang-undang perlindungan data pribadi.',
-                'kategori' => 'privasi',
+                'jawaban' => 'Ya, semua laporan pengaduan bersifat rahasia dan hanya dapat diakses oleh Anda dan petugas berwenang yang menangani kasus. Data pribadi Anda dilindungi sesuai undang-undang perlindungan data. Untuk kasus tertentu yang memerlukan identitas saksi/pelapor dilindungi, Anda dapat meminta perlindungan khusus kepada petugas yang menangani.',
+                'kategori' => 'informasi',
                 'keywords' => 'rahasia,privasi,keamanan,data',
-            ],
-            [
-                'pertanyaan' => 'Bagaimana cara mendaftar akun baru?',
-                'jawaban' => 'Klik tombol "Daftar" di pojok kanan atas. Isi formulir dengan data lengkap: nama, NIK, email, nomor telepon, alamat, dan password. Setelah berhasil mendaftar, Anda bisa langsung login dan membuat pengaduan.',
-                'kategori' => 'akun',
-                'keywords' => 'daftar,registrasi,akun,baru',
-            ],
-            [
-                'pertanyaan' => 'Apa itu prioritas pengaduan?',
-                'jawaban' => 'Prioritas pengaduan dibagi menjadi 3: Rendah, Sedang, dan Tinggi. Pilih prioritas sesuai dengan tingkat urgensi kasus Anda. Kasus dengan prioritas tinggi akan diproses lebih cepat oleh petugas.',
-                'kategori' => 'pengaduan',
-                'keywords' => 'prioritas,tinggi,rendah,sedang',
-            ],
-            [
-                'pertanyaan' => 'Bisakah saya mengupload foto sebagai bukti?',
-                'jawaban' => 'Ya, Anda dapat mengupload foto sebagai bukti pendukung dalam format JPG atau PNG dengan ukuran maksimal 2MB. Foto yang jelas akan sangat membantu proses investigasi.',
-                'kategori' => 'pengaduan',
-                'keywords' => 'foto,upload,bukti,gambar',
-            ],
-            [
-                'pertanyaan' => 'Bagaimana jika saya lupa password?',
-                'jawaban' => 'Jika Anda lupa password, silakan hubungi admin melalui email admin@polisi.id dengan menyertakan NIK dan nama lengkap Anda untuk verifikasi identitas. Fitur reset password otomatis sedang dalam pengembangan.',
-                'kategori' => 'akun',
-                'keywords' => 'lupa,password,reset',
             ],
         ];
 
@@ -114,7 +114,6 @@ class DatabaseSeeder extends Seeder
             Faq::create($faq);
         }
 
-        // === INFO KONFIRMASI ===
         $this->command->info('✅ Database seeded successfully!');
         $this->command->info('');
         $this->command->info('📧 Login Petugas:');
