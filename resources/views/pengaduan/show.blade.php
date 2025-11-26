@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="mb-6">
-    <a href="{{ auth()->user()->isPetugas() ? route('petugas.dashboard') : route('pengaduan.index') }}" class="text-purple-600 hover:text-purple-800">
+    <a href="{{ auth()->user()->isPetugas() ? route('petugas.dashboard') : route('dashboard') }}" class="text-purple-600 hover:text-purple-800">
         <i class="fas fa-arrow-left mr-2"></i>Kembali
     </a>
 </div>
