@@ -30,13 +30,13 @@
                     <p class="font-semibold text-gray-800">{{ $pengaduan->getSubKategoriLabel() }}</p>
                 </div>
                 <div class="col-span-2">
-                    <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal Kejadian</p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal</p>
                     <p class="font-semibold text-gray-800">{{ $pengaduan->tanggal_kejadian->format('d M Y') }}</p>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi Kejadian</h3>
+                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</h3>
                 <p class="text-gray-700 mb-3">{{ $pengaduan->lokasi }}</p>
                 <div class="flex items-center text-sm text-gray-600 mb-3">
                     <i class="fas fa-map-pin mr-2"></i>
@@ -53,7 +53,7 @@
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-800 mb-3"><i class="fas fa-align-left mr-2"></i>Deskripsi Kejadian</h3>
+                <h3 class="font-semibold text-gray-800 mb-3"><i class="fas fa-align-left mr-2"></i>Deskripsi</h3>
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <p class="text-gray-700 leading-relaxed">{{ $pengaduan->deskripsi }}</p>
                 </div>
@@ -89,7 +89,7 @@
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-toggle-on mr-2"></i>Status Pengaduan
+                        <i class="fas fa-toggle-on mr-2"></i>Status Laporan
                     </label>
                     <select name="status" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
@@ -107,6 +107,7 @@
                     <textarea name="tanggapan" rows="5"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
                         placeholder="Berikan tanggapan atau catatan untuk pelapor...">{{ old('tanggapan', $pengaduan->tanggapan) }}</textarea>
+                    <input type="text" name=""
                     <p class="text-sm text-gray-500 mt-2">Tanggapan ini akan dilihat oleh pelapor</p>
                 </div>
 
@@ -163,7 +164,7 @@
                         <i class="fas fa-plus text-green-600"></i>
                     </div>
                     <div>
-                        <p class="font-semibold text-sm text-gray-800">Pengaduan Dibuat</p>
+                        <p class="font-semibold text-sm text-gray-800">Laporan Dibuat</p>
                         <p class="text-xs text-gray-500">{{ $pengaduan->created_at->format('d M Y, H:i') }}</p>
                         <p class="text-xs text-gray-600 mt-1">{{ $pengaduan->created_at->diffForHumans() }}</p>
                     </div>

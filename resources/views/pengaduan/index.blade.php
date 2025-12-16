@@ -5,9 +5,9 @@
 @section('content')
 <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">
-        <i class="fas fa-history mr-2"></i>Riwayat Pengaduan
+        <i class="fas fa-history mr-2"></i>Riwayat Laporan
     </h1>
-    <p class="text-gray-600">Semua pengaduan yang pernah Anda buat</p>
+    <p class="text-gray-600">Semua laporan yang pernah Anda buat</p>
 </div>
 
 <div class="bg-white rounded-lg shadow-lg p-6">

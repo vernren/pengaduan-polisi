@@ -61,7 +61,7 @@
                 <i class="fas fa-plus text-purple-600 text-2xl"></i>
             </div>
             <div>
-                <h3 class="font-bold text-lg text-gray-800">Buat Pengaduan</h3>
+                <h3 class="font-bold text-lg text-gray-800">Buat Laporan</h3>
                 <p class="text-sm text-gray-600">Laporkan kejadian baru</p>
             </div>
         </div>

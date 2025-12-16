@@ -1,4 +1,3 @@
-<!-- resources/views/petugas/dashboard.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Dashboard Petugas')
@@ -8,7 +7,7 @@
     <h1 class="text-3xl font-bold text-gray-800 mb-2">
         <i class="fas fa-user-shield mr-2"></i>Dashboard Petugas
     </h1>
-    <p class="text-gray-600">Kelola dan tanggapi pengaduan masyarakat</p>
+    <p class="text-gray-600">Kelola dan tanggapi laporan masyarakat</p>
 </div>
 
 <!-- Stats Cards -->
@@ -54,7 +53,7 @@
             </div>
             <i class="fas fa-file-alt text-5xl opacity-30"></i>
         </div>
-        <p class="text-xs text-purple-100 mt-3">Semua pengaduan</p>
+        <p class="text-xs text-purple-100 mt-3">Semua laporan</p>
     </div>
 </div>
 
@@ -80,14 +79,14 @@
 <div class="bg-white rounded-lg shadow-lg">
     <div class="p-6 border-b border-gray-200">
         <h2 class="text-xl font-bold text-gray-800">
-            <i class="fas fa-list mr-2"></i>Daftar Pengaduan
+            <i class="fas fa-list mr-2"></i>Daftar Laporan
         </h2>
     </div>
 
     @if($pengaduan->isEmpty())
         <div class="text-center py-12">
             <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500">Tidak ada pengaduan untuk ditampilkan</p>
+            <p class="text-gray-500">Tidak ada laporan untuk ditampilkan</p>
         </div>
     @else
         <div class="divide-y divide-gray-200">
@@ -113,12 +112,35 @@
                             </div>
                         </div>
 
-                        <div class="ml-4 flex flex-col space-y-2">
-                            <a href="{{ route('petugas.pengaduan.show', $item) }}" 
-                                class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition text-center text-sm font-semibold whitespace-nowrap">
-                                <i class="fas fa-eye mr-1"></i>Lihat Detail
-                            </a>
-                        </div>
+                        <div class="ml-4 flex flex-col sm:flex-row gap-2 items-stretch">
+                        <!-- Detail -->
+                        <a href="{{ route('petugas.pengaduan.show', $item) }}"
+                        class="inline-flex items-center justify-center gap-2
+                                bg-purple-600 text-white px-4 py-2 rounded-lg
+                                hover:bg-purple-700 transition
+                                text-sm font-semibold whitespace-nowrap min-w-[120px]">
+                            <i class="fas fa-eye"></i>
+                            Lihat Detail
+                        </a>
+
+                        <!-- Hapus -->
+                        <form action="{{ route('petugas.pengaduan.destroy', $item) }}"
+                            method="POST"
+                            onsubmit="return confirm('Yakin ingin menghapus pengaduan ini?')"
+                            class="w-full sm:w-auto">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="inline-flex items-center justify-center gap-2
+                                    bg-red-600 text-white px-4 py-2 rounded-lg
+                                    hover:bg-red-700 transition
+                                    text-sm font-semibold w-full min-w-[120px]">
+                                <i class="fas fa-trash"></i>
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+
                     </div>
 
                     @if($item->foto->count() > 0)

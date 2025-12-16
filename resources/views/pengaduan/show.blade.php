@@ -30,13 +30,13 @@
                     <p class="font-semibold text-gray-800">{{ $pengaduan->getSubKategoriLabel() }}</p>
                 </div>
                 <div class="col-span-2">
-                    <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal Kejadian</p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal</p>
                     <p class="font-semibold text-gray-800">{{ $pengaduan->tanggal_kejadian->format('d M Y') }}</p>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi Kejadian</h3>
+                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</h3>
                 <p class="text-gray-700 mb-3">{{ $pengaduan->lokasi }}</p>
                 
                 <!-- Leaflet map (will show fallback message if coords missing) -->
@@ -49,7 +49,7 @@
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-align-left mr-2"></i>Deskripsi Kejadian</h3>
+                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-align-left mr-2"></i>Deskripsi</h3>
                 <p class="text-gray-700 leading-relaxed">{{ $pengaduan->deskripsi }}</p>
             </div>
 

@@ -16,7 +16,7 @@
 
     <div class="bg-white rounded-lg shadow-lg p-8">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">
-            <i class="fas fa-file-alt text-purple-600 mr-2"></i>Buat Pengaduan Baru
+            <i class="fas fa-file-alt text-purple-600 mr-2"></i>Buat Laporan Baru
         </h2>
 
         @if($errors->any())
@@ -34,7 +34,7 @@
             
             <div class="mb-6">
                 <label class="block text-gray-700 font-semibold mb-2">
-                    <i class="fas fa-heading mr-2"></i>Judul Pengaduan <span class="text-red-500">*</span>
+                    <i class="fas fa-heading mr-2"></i>Judul Laporan <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="judul" value="{{ old('judul') }}" required
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
@@ -49,7 +49,7 @@
                     <select name="kategori_utama" id="kategori_utama" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
                         <option value="">Pilih Kategori</option>
-                        <option value="informasi" {{ old('kategori_utama') == 'informasi' ? 'selected' : '' }}>Informasi</option>
+                        {{-- <option value="informasi" {{ old('kategori_utama') == 'informasi' ? 'selected' : '' }}>Informasi</option> --}}
                         <option value="pengaduan" {{ old('kategori_utama') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
                         <option value="permintaan" {{ old('kategori_utama') == 'permintaan' ? 'selected' : '' }}>Permintaan</option>
                     </select>
@@ -68,7 +68,7 @@
 
             <div class="mb-6">
                 <label class="block text-gray-700 font-semibold mb-2">
-                    <i class="fas fa-calendar mr-2"></i>Tanggal Kejadian <span class="text-red-500">*</span>
+                    <i class="fas fa-calendar mr-2"></i>Tanggal<span class="text-red-500">*</span>
                 </label>
                 <input type="date" name="tanggal_kejadian" value="{{ old('tanggal_kejadian') }}" required max="{{ date('Y-m-d') }}"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
@@ -76,7 +76,7 @@
 
             <div class="mb-6 relative">
                 <label class="block text-gray-700 font-semibold mb-2">
-                    <i class="fas fa-map-marker-alt mr-2"></i>Lokasi Kejadian <span class="text-red-500">*</span>
+                    <i class="fas fa-map-marker-alt mr-2"></i>Lokasi<span class="text-red-500">*</span>
                 </label>
                 <input type="text" id="searchLocation" name="lokasi" value="{{ old('lokasi') }}" required
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
@@ -99,11 +99,11 @@
 
             <div class="mb-6">
                 <label class="block text-gray-700 font-semibold mb-2">
-                    <i class="fas fa-align-left mr-2"></i>Deskripsi Kejadian <span class="text-red-500">*</span>
+                    <i class="fas fa-align-left mr-2"></i>Deskripsi<span class="text-red-500">*</span>
                 </label>
                 <textarea name="deskripsi" required rows="6"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-                    placeholder="Jelaskan kronologi kejadian secara detail...">{{ old('deskripsi') }}</textarea>
+                    placeholder="Jelaskan deskripsi laporan secara detail...">{{ old('deskripsi') }}</textarea>
                 <p class="text-sm text-gray-500 mt-2">Minimal 50 karakter</p>
             </div>
 
@@ -127,7 +127,7 @@
 
             <div class="flex space-x-4">
                 <button type="submit" class="flex-1 gradient-bg text-white py-3 rounded-lg hover:opacity-90 transition font-semibold">
-                    <i class="fas fa-paper-plane mr-2"></i>Kirim Pengaduan
+                    <i class="fas fa-paper-plane mr-2"></i>Kirim Laporan
                 </button>
                 <a href="{{ route('dashboard') }}" class="px-8 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-semibold text-gray-700">
                     Batal

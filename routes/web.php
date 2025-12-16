@@ -44,4 +44,5 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
     Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
     Route::get('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'show'])->name('pengaduan.show');
     Route::put('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'update'])->name('pengaduan.update');
+     Route::delete('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'destroy'])->name('pengaduan.destroy');
 });

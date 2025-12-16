@@ -49,7 +49,7 @@
                                 <i class="fas fa-home mr-2"></i>Dashboard
                             </a>
                             <a href="{{ route('pengaduan.create') }}" class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
-                                <i class="fas fa-plus mr-2"></i>Buat Pengaduan
+                                <i class="fas fa-plus mr-2"></i>Buat Laporan
                             </a>
                         @endif
                         
