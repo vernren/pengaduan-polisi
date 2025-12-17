@@ -38,21 +38,21 @@ class DashboardController extends Controller
         return view('petugas.show', compact('pengaduan'));
     }
 
-    public function update(Request $request, Pengaduan $pengaduan)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,diproses,selesai,ditolak',
-            'tanggapan' => 'nullable|string',
-        ]);
+public function update(Request $request, Pengaduan $pengaduan)
+{
+    $validated = $request->validate([
+        'status' => 'required|in:pending,diproses,selesai,ditolak',
+        'tanggapan' => 'nullable|string',
+    ]);
 
-        $pengaduan->update([
-            'status' => $validated['status'],
-            'tanggapan' => $validated['tanggapan'],
-            'petugas_id' => auth()->id(),
-        ]);
+    $pengaduan->update([
+        'status' => $validated['status'],
+        'tanggapan' => $validated['tanggapan'],
+        'petugas_id' => auth()->id(), // ID petugas login
+    ]);
 
-        return redirect()->back()->with('success', 'Status pengaduan berhasil diperbarui!');
-    }
+    return redirect()->back()->with('success', 'Status pengaduan berhasil diperbarui!');
+}
 
     // ======================
     // ✅ HAPUS PENGADUAN
