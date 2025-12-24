@@ -5,18 +5,17 @@ namespace App\Http\Controllers\Petugas;
 use App\Http\Controllers\Controller;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil status dari query string (mis. ?status=pending). default 'all' = semua status.
-        $status = $request->query('status', 'all');
 
-        // Daftar status valid (pastikan ini sesuai dengan nilai di DB)
+        
+        $status = $request->query('status', 'all');
         $validStatuses = ['pending', 'diproses', 'selesai', 'ditolak'];
 
-        // Statistik counts untuk cards
         $stats = [
             'pending'  => Pengaduan::where('status', 'pending')->count(),
             'diproses' => Pengaduan::where('status', 'diproses')->count(),
@@ -24,39 +23,49 @@ class DashboardController extends Controller
             'total'    => Pengaduan::count(),
         ];
 
-        // Query dasar dengan relasi yang dibutuhkan
         $query = Pengaduan::with('user', 'foto')->latest();
 
-        // Terapkan filter jika status valid dan bukan 'all'
-        if ($status !== 'all' && in_array($status, $validStatuses, true)) {
+        if ($status !== 'all' && in_array($status, $validStatuses)) {
             $query->where('status', $status);
         }
 
-        // Paginate dan pertahankan query string (kecuali page)
-        $pengaduan = $query->paginate(15)->appends($request->except('page'));
+        $pengaduan = $query->paginate(15)->withQueryString();
 
         return view('petugas.dashboard', compact('stats', 'pengaduan'));
     }
 
     public function show(Pengaduan $pengaduan)
     {
-        $pengaduan->load('user', 'foto', 'petugas');
+        $pengaduan->load('user', 'foto');
         return view('petugas.show', compact('pengaduan'));
     }
 
     public function update(Request $request, Pengaduan $pengaduan)
     {
         $validated = $request->validate([
-            'status' => 'required|in:pending,diproses,selesai,ditolak',
-            'tanggapan' => 'nullable|string',
+            'status'        => 'required|in:pending,diproses,selesai,ditolak',
+            'nama_petugas'  => 'required|string|max:100',
+            'tanggapan'     => 'nullable|string',
         ]);
 
-        $pengaduan->update([
-            'status' => $validated['status'],
-            'tanggapan' => $validated['tanggapan'] ?? null,
-            'petugas_id' => auth()->id(),
-        ]);
+        $pengaduan->update($validated);
 
-        return redirect()->back()->with('success', 'Status pengaduan berhasil diperbarui!');
+        return back()->with('success', 'Pengaduan berhasil diperbarui');
+    }
+
+    public function destroy(Pengaduan $pengaduan)
+    {
+        foreach ($pengaduan->foto as $foto) {
+            if ($foto->file_path && Storage::exists($foto->file_path)) {
+                Storage::delete($foto->file_path);
+            }
+            $foto->delete();
+        }
+
+        $pengaduan->delete();
+
+        return redirect()
+            ->route('petugas.dashboard')
+            ->with('success', 'Pengaduan berhasil dihapus');
     }
 }
