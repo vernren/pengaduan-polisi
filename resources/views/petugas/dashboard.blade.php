@@ -7,7 +7,7 @@
     <h1 class="text-3xl font-bold text-gray-800 mb-2">
         <i class="fas fa-user-shield mr-2"></i>Dashboard Petugas
     </h1>
-    <p class="text-gray-600">Kelola dan tanggapi pengaduan masyarakat</p>
+    <p class="text-gray-600">Kelola dan tanggapi laporan masyarakat</p>
 </div>
 
 <!-- Stats Cards -->
@@ -53,7 +53,7 @@
             </div>
             <i class="fas fa-file-alt text-5xl opacity-30"></i>
         </div>
-        <p class="text-xs text-purple-100 mt-3">Semua pengaduan</p>
+        <p class="text-xs text-purple-100 mt-3">Semua laporan</p>
     </div>
 </div>
 
@@ -79,18 +79,18 @@
     </div>
 </div>
 
-<!-- Pengaduan List -->
+<!-- laporan List -->
 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
     <div class="p-6 border-b border-gray-200">
         <h2 class="text-xl font-bold text-gray-800">
-            <i class="fas fa-list mr-2"></i>Daftar Pengaduan
+            <i class="fas fa-list mr-2"></i>Daftar Laporan
         </h2>
     </div>
 
     @if($pengaduan->isEmpty())
         <div class="text-center py-12">
             <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500">Tidak ada pengaduan</p>
+            <p class="text-gray-500">Tidak ada laporan</p>
         </div>
     @else
         <div class="divide-y divide-gray-200">

@@ -23,11 +23,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            
+
             if (Auth::user()->isPetugas()) {
                 return redirect()->intended('/petugas/dashboard');
             }
-            
+
             return redirect()->intended('/dashboard');
         }
 
@@ -50,7 +50,14 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
             'address' => 'required|string',
             'nik' => 'required|string|size:16|unique:users',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:5120',
         ]);
+
+        $fotoPath = null;
+
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('foto_user', 'public');
+        }
 
         $user = User::create([
             'name' => $validated['name'],
@@ -59,6 +66,7 @@ class AuthController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'nik' => $validated['nik'],
+            'foto' => $fotoPath,
             'role' => 'masyarakat',
         ]);
 
@@ -72,7 +80,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/');
     }
 }

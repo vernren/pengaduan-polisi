@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard - Pengaduan Polisi')
+@section('title', 'Dashboard - Laporan Polisi')
 
 @section('content')
 <div class="mb-8">
@@ -70,7 +70,7 @@
                 <i class="fas fa-plus text-purple-600 text-2xl"></i>
             </div>
             <div>
-                <h3 class="font-bold text-lg text-gray-800">Buat Pengaduan</h3>
+                <h3 class="font-bold text-lg text-gray-800">Buat Laporan</h3>
                 <p class="text-sm text-gray-600">Laporkan kejadian baru</p>
             </div>
         </div>
@@ -107,7 +107,7 @@
 <div class="bg-white rounded-lg shadow-lg p-6 overflow-hidden">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-bold text-gray-800">
-            <i class="fas fa-clock mr-2"></i>Pengaduan Terbaru
+            <i class="fas fa-clock mr-2"></i>Laporan Terbaru
         </h2>
         <a href="{{ route('pengaduan.index') }}"
            class="text-purple-600 hover:text-purple-800 font-semibold text-sm">
@@ -118,7 +118,7 @@
     @if($pengaduan->isEmpty())
         <div class="text-center py-12">
             <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500">Anda belum memiliki pengaduan</p>
+            <p class="text-gray-500">Anda belum memiliki laporan</p>
         </div>
     @else
         <div class="space-y-4">

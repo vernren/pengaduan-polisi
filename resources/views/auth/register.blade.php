@@ -3,14 +3,22 @@
 @section('title', 'Daftar - Pengaduan Polisi')
 
 @section('scripts')
-<script>
-    const phoneInput = document.getElementById('phone_input');
-    const phoneHidden = document.getElementById('phone');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('phone_input');
+            const phoneHidden = document.getElementById('phone');
 
-    phoneInput.addEventListener('input', function () {
-        phoneHidden.value = '+62' + phoneInput.value;
-    });
-</script>
+            phoneInput.addEventListener('input', function() {
+                phoneHidden.value = '+62' + phoneInput.value;
+            });
+
+            // isi awal (untuk old value)
+            if (phoneInput.value) {
+                phoneHidden.value = '+62' + phoneInput.value;
+            }
+        });
+    </script>
+@endsection
 
 @section('content')
     <div class="max-w-2xl mx-auto">
@@ -29,7 +37,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('register') }}" method="POST">
+            <form action="{{ route('register') }}" enctype="multipart/form-data" method="POST">
                 @csrf
 
                 <div class="grid md:grid-cols-2 gap-4 mb-4">
@@ -80,7 +88,6 @@
                     <input type="hidden" name="phone" id="phone" value="{{ old('phone') }}">
                 </div>
 
-
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">
                         <i class="fas fa-map-marker-alt mr-2"></i>Alamat
@@ -88,6 +95,19 @@
                     <textarea name="address" required rows="3"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
                         placeholder="Jl. Contoh No. 123, Jakarta">{{ old('address') }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">
+                        <i class="fas fa-camera mr-2"></i>Foto Identitas & Selfie
+                    </label>
+
+                    <input type="file" name="foto" accept="image/*" capture="environment" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 bg-white">
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Ambil foto langsung dari kamera atau pilih dari galeri
+                    </p>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-4 mb-6">
