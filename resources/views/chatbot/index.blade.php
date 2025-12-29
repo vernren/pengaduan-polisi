@@ -1,203 +1,202 @@
-<!-- resources/views/chatbot/index.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Chatbot - Pengaduan Polisi')
-
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <!-- Header -->
-        <div class="gradient-bg text-white p-6">
-            <h2 class="text-2xl font-bold flex items-center">
-                <i class="fas fa-robot mr-3 text-3xl"></i>
-                Asisten Virtual Polisi
-            </h2>
-            <p class="text-sm mt-2 opacity-90">Tanyakan apa saja seputar pengaduan dan layanan kepolisian</p>
-        </div>
+<style>
+:root {
+    --brand: #6d6bd3;
+    --brand-dark: #4f46e5;
+    --bg-dark: #0f172a;
+    --panel: #1e293b;
+    --bot: #273449;
+    --user: #4f46e5;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+}
 
-        <!-- Chat Container -->
-        <div id="chatContainer" class="h-96 overflow-y-auto p-6 bg-gray-50 space-y-4">
-            <!-- Welcome Message -->
-            <div class="flex items-start space-x-3 chat-bubble">
-                <div class="bg-purple-600 text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="bg-white rounded-lg shadow p-4 max-w-md">
-                    <p class="text-gray-800">
-                        Halo! 👋 Saya asisten virtual kepolisian. Saya siap membantu menjawab pertanyaan Anda seputar:
-                    </p>
-                    <ul class="mt-2 text-sm text-gray-700 space-y-1">
-                        <li>✓ Cara membuat laporan pengaduan</li>
-                        <li>✓ Status pengaduan Anda</li>
-                        <li>✓ Dokumen yang diperlukan</li>
-                        <li>✓ Kontak darurat</li>
-                    </ul>
-                    <p class="text-gray-800 mt-3">Silakan ajukan pertanyaan Anda!</p>
-                </div>
-            </div>
-        </div>
+/* Container */
+.chat-shell {
+    max-width: 900px;
+    margin: 40px auto;
+    background: var(--bg-dark);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    overflow: hidden;
+}
 
-        <!-- Suggestion Chips -->
-        <div id="suggestions" class="px-6 py-3 bg-gray-100 flex flex-wrap gap-2">
-            <button onclick="sendSuggestion('Bagaimana cara membuat laporan?')" 
-                class="bg-white px-4 py-2 rounded-full text-sm text-purple-600 hover:bg-purple-50 transition shadow-sm">
-                Cara membuat laporan
-            </button>
-            <button onclick="sendSuggestion('Berapa lama proses pengaduan?')" 
-                class="bg-white px-4 py-2 rounded-full text-sm text-purple-600 hover:bg-purple-50 transition shadow-sm">
-                Lama proses
-            </button>
-            <button onclick="sendSuggestion('Dokumen apa yang diperlukan?')" 
-                class="bg-white px-4 py-2 rounded-full text-sm text-purple-600 hover:bg-purple-50 transition shadow-sm">
-                Dokumen persyaratan
-            </button>
-        </div>
+/* Header */
+.chat-header {
+    background: linear-gradient(135deg, #6d6bd3, #4f46e5);
+    color: white;
+    padding: 14px 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        <!-- Input Area -->
-        <div class="p-6 bg-white border-t">
-            <form id="chatForm" class="flex space-x-3">
-                <input type="text" id="messageInput" 
-                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-                    placeholder="Ketik pertanyaan Anda..." required>
-                <button type="submit" 
-                    class="gradient-bg text-white px-6 py-3 rounded-lg hover:opacity-90 transition font-semibold">
-                    <i class="fas fa-paper-plane mr-2"></i>Kirim
-                </button>
-            </form>
+/* Body */
+.chat-body {
+    height: 480px;
+    padding: 18px;
+    overflow-y: auto;
+    background: radial-gradient(circle at top, #111827, #020617);
+}
+
+/* Bubble */
+.bubble {
+    max-width: 75%;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+    line-height: 1.6;
+    font-size: 14px;
+    white-space: pre-wrap;
+    color: var(--text);
+}
+
+/* Bot */
+.bubble-bot {
+    background: var(--bot);
+    border-top-left-radius: 6px;
+}
+
+/* User */
+.bubble-user {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    margin-left: auto;
+    border-top-right-radius: 6px;
+}
+
+/* Typing */
+.typing {
+    font-style: italic;
+    color: var(--muted);
+}
+
+/* Footer */
+.chat-footer {
+    background: #020617;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Input */
+.chat-footer input {
+    flex: 1;
+    background: #020617;
+    color: var(--text);
+    border: 1px solid #334155;
+    border-radius: 999px;
+    padding: 12px 18px;
+}
+
+.chat-footer input::placeholder {
+    color: var(--muted);
+}
+
+/* Send button */
+.chat-footer button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #6d6bd3, #4f46e5);
+    color: white;
+    font-size: 18px;
+}
+
+/* Scrollbar */
+.chat-body::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-body::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 8px;
+}
+</style>
+
+<div class="chat-shell">
+    <div class="chat-header">
+        🤖 Chatbot Kepolisian
+    </div>
+
+    <div id="chatBody" class="chat-body">
+        <div class="bubble bubble-bot">
+            Halo 👋 Saya chatbot kepolisian.<br>
+            Silakan ajukan pertanyaan seputar kepolisian dan pengaduan masyarakat.
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="mt-6 grid md:grid-cols-2 gap-4">
-        <a href="{{ route('pengaduan.create') }}" class="bg-white rounded-lg shadow p-4 hover:shadow-lg transition flex items-center space-x-4">
-            <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center">
-                <i class="fas fa-file-alt text-blue-600 text-xl"></i>
-            </div>
-            <div>
-                <h4 class="font-semibold text-gray-800">Buat Laporan</h4>
-                <p class="text-sm text-gray-600">Laporkan kejadian sekarang</p>
-            </div>
-        </a>
-        <a href="tel:110" class="bg-white rounded-lg shadow p-4 hover:shadow-lg transition flex items-center space-x-4">
-            <div class="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center">
-                <i class="fas fa-phone text-red-600 text-xl"></i>
-            </div>
-            <div>
-                <h4 class="font-semibold text-gray-800">Panggilan Darurat</h4>
-                <p class="text-sm text-gray-600">Hubungi 110</p>
-            </div>
-        </a>
-    </div>
+    <form id="chatForm" class="chat-footer">
+        @csrf
+        <input type="text" id="message" placeholder="Ketik pesan..." autocomplete="off">
+        <button type="submit">➤</button>
+    </form>
 </div>
-@endsection
 
-@section('scripts')
 <script>
-    const chatContainer = document.getElementById('chatContainer');
-    const chatForm = document.getElementById('chatForm');
-    const messageInput = document.getElementById('messageInput');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+const chatBody = document.getElementById('chatBody');
+const messageInput = document.getElementById('message');
+const chatForm = document.getElementById('chatForm');
 
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const message = messageInput.value.trim();
-        if (!message) return;
+function scrollBottom() {
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
 
-        // Add user message
-        addMessage(message, 'user');
-        messageInput.value = '';
+chatForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const msg = messageInput.value.trim();
+    if (!msg) return;
 
-        // Show typing indicator
-        const typingId = showTypingIndicator();
+    chatBody.innerHTML += `
+        <div class="bubble bubble-user">${msg}</div>
+    `;
+    scrollBottom();
+    messageInput.value = '';
 
-        try {
-            const response = await fetch('{{ route("chatbot.send") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({ message })
-            });
+    const typingId = 'typing-' + Date.now();
+    chatBody.innerHTML += `
+        <div id="${typingId}" class="bubble bubble-bot typing">
+            Bot sedang mengetik...
+        </div>
+    `;
+    scrollBottom();
 
-            const data = await response.json();
-            
-            // Remove typing indicator
-            removeTypingIndicator(typingId);
-
-            // Add bot response
-            addMessage(data.message, 'bot');
-
-        } catch (error) {
-            removeTypingIndicator(typingId);
-            addMessage('Maaf, terjadi kesalahan. Silakan coba lagi.', 'bot');
-        }
-    });
-
-    function addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'flex items-start space-x-3 chat-bubble';
-        
-        if (sender === 'user') {
-            messageDiv.className += ' flex-row-reverse space-x-reverse';
-            messageDiv.innerHTML = `
-                <div class="bg-gray-600 text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="gradient-bg text-white rounded-lg shadow p-4 max-w-md">
-                    <p>${escapeHtml(text)}</p>
-                </div>
-            `;
-        } else {
-            messageDiv.innerHTML = `
-                <div class="bg-purple-600 text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="bg-white rounded-lg shadow p-4 max-w-md">
-                    <p class="text-gray-800">${escapeHtml(text)}</p>
-                </div>
-            `;
-        }
-
-        chatContainer.appendChild(messageDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function showTypingIndicator() {
-        const typingDiv = document.createElement('div');
-        typingDiv.id = 'typing-' + Date.now();
-        typingDiv.className = 'flex items-start space-x-3 chat-bubble';
-        typingDiv.innerHTML = `
-            <div class="bg-purple-600 text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-robot"></i>
-            </div>
-            <div class="bg-white rounded-lg shadow p-4">
-                <div class="flex space-x-2">
-                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                </div>
+    fetch("{{ route('chatbot.send') }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(r => r.json())
+    .then(d => {
+        document.getElementById(typingId).remove();
+        chatBody.innerHTML += `
+            <div class="bubble bubble-bot">${d.reply}</div>
+        `;
+        scrollBottom();
+    })
+    .catch(() => {
+        document.getElementById(typingId).remove();
+        chatBody.innerHTML += `
+            <div class="bubble bubble-bot">
+                Terjadi kesalahan. Silakan coba lagi.
             </div>
         `;
-        chatContainer.appendChild(typingDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        return typingDiv.id;
-    }
+        scrollBottom();
+    });
+});
 
-    function removeTypingIndicator(id) {
-        const typingDiv = document.getElementById(id);
-        if (typingDiv) typingDiv.remove();
-    }
-
-    function sendSuggestion(text) {
-        messageInput.value = text;
+// Enter to send
+messageInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         chatForm.dispatchEvent(new Event('submit'));
     }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+});
 </script>
 @endsection

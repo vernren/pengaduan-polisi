@@ -27,6 +27,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
+
     <!-- Navigation -->
     <nav class="gradient-bg shadow-lg">
         <div class="container mx-auto px-4">
@@ -36,7 +37,8 @@
                     <span class="text-white font-bold text-xl">Pengaduan Polisi</span>
                 </a>
                 
-                <div class="flex items-center space-x-4">              
+                <div class="flex items-center space-x-4">
+
                     @auth
                         @if(auth()->user()->isPetugas())
                             <a href="{{ route('petugas.dashboard') }}" class="text-white hover:text-gray-200 transition">

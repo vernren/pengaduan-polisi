@@ -22,9 +22,12 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-// Chatbot Routes (bisa diakses tanpa login)
-Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
-Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
+
+Route::get('/chatbot', [ChatbotController::class, 'index'])
+    ->name('chatbot.index');
+
+Route::post('/chatbot/send', [ChatbotController::class, 'send'])
+    ->name('chatbot.send');
 
 // Masyarakat Routes
 Route::middleware(['auth'])->group(function () {
@@ -39,9 +42,21 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('pengaduan', PengaduanController::class);
 });
 
+Route::post('/pengaduan/{pengaduan}/feedback', 
+    [PengaduanController::class, 'storeFeedback']
+)->name('pengaduan.feedback');
+
+
 // Petugas Routes
 Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
     Route::get('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'show'])->name('pengaduan.show');
     Route::put('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'update'])->name('pengaduan.update');
+     Route::delete('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'destroy'])->name('pengaduan.destroy');
 });
+
+// Route::get('/debug-gemini', function (
+//     \App\Services\PoliceGeminiService $ai
+// ) {
+//     return $ai->reply('cara membuat SIM');
+// });

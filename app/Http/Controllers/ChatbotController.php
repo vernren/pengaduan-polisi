@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Faq;
-use App\Models\ChatHistory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Services\PoliceTopicGuard;
+use App\Services\PoliceGeminiService;
+use App\Models\ChatHistory;
 
 class ChatbotController extends Controller
 {
@@ -14,48 +14,40 @@ class ChatbotController extends Controller
         return view('chatbot.index');
     }
 
-    public function sendMessage(Request $request)
-    {
-        $pertanyaan = $request->input('message');
-        $sessionId = $request->session()->get('chat_session_id', Str::uuid());
-        $request->session()->put('chat_session_id', $sessionId);
+    public function send(Request $request, PoliceGeminiService $ai)
+{
+    $request->validate([
+        'message' => 'required|string|max:300'
+    ]);
 
-        $faqs = Faq::search($pertanyaan);
-        
-        if ($faqs->isEmpty()) {
-            $jawaban = "Maaf, saya tidak menemukan jawaban yang sesuai. Silakan hubungi petugas melalui menu pengaduan atau hubungi nomor darurat 110 untuk situasi mendesak.";
-            $faqId = null;
-        } else {
-            $faq = $faqs->first();
-            $jawaban = $faq->jawaban;
-            $faqId = $faq->id;
-            $faq->increment('view_count');
-        }
+    $message = trim($request->message);
 
-        ChatHistory::create([
-            'user_id' => auth()->id(),
-            'session_id' => $sessionId,
-            'pertanyaan' => $pertanyaan,
-            'jawaban' => $jawaban,
-            'faq_id' => $faqId,
-            'created_at' => now(),
-        ]);
-
+    // Guard topik (lebih longgar)
+    if (!\App\Services\PoliceTopicGuard::isAllowed($message)) {
         return response()->json([
-            'success' => true,
-            'message' => $jawaban,
-            'suggestions' => $this->getSuggestions($pertanyaan)
+            'reply' => 'Maaf, saya hanya dapat membantu informasi seputar layanan kepolisian, hukum dasar, dan pengaduan masyarakat.'
         ]);
     }
 
-    private function getSuggestions($query)
-    {
-        $suggestions = [
-            'Bagaimana cara membuat laporan?',
-            'Berapa lama proses pengaduan?',
-            'Dokumen apa yang diperlukan?',
-        ];
+    // Ambil 3 chat terakhir (konteks)
+    $history = \App\Models\ChatHistory::latest()
+        ->take(3)
+        ->get()
+        ->reverse();
 
-        return array_slice($suggestions, 0, 3);
+    $context = '';
+    foreach ($history as $chat) {
+        $context .= "User: {$chat->user_message}\n";
+        $context .= "Bot: {$chat->bot_reply}\n";
+    }
+
+    $reply = $ai->reply($message, $context);
+
+    \App\Models\ChatHistory::create([
+        'user_message' => $message,
+        'bot_reply' => $reply
+    ]);
+
+    return response()->json(['reply' => $reply]);
     }
 }

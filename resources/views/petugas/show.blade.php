@@ -1,4 +1,3 @@
-<!-- resources/views/petugas/show.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Detail Pengaduan - Petugas')
@@ -23,29 +22,82 @@
 
             <div class="grid grid-cols-2 gap-4 mb-6 text-sm bg-gray-50 p-4 rounded-lg">
                 <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-tag mr-2"></i>Kategori</p>
-                    <p class="font-semibold text-gray-800">{{ ucfirst($pengaduan->kategori) }}</p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-layer-group mr-2"></i>Kategori Utama</p>
+                    <p class="font-semibold text-gray-800">{{ $pengaduan->getKategoriLabel() }}</p>
                 </div>
                 <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-exclamation-triangle mr-2"></i>Prioritas</p>
-                    <p class="font-semibold {{ $pengaduan->prioritas == 'tinggi' ? 'text-red-600' : ($pengaduan->prioritas == 'sedang' ? 'text-yellow-600' : 'text-green-600') }}">
-                        {{ ucfirst($pengaduan->prioritas) }}
-                    </p>
+                    <p class="text-gray-500 mb-1"><i class="fas fa-tag mr-2"></i>Sub Kategori</p>
+                    <p class="font-semibold text-gray-800">{{ $pengaduan->getSubKategoriLabel() }}</p>
                 </div>
-                <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</p>
-                    <p class="font-semibold text-gray-800">{{ $pengaduan->lokasi }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal Kejadian</p>
+                <div class="col-span-2">
+                    <p class="text-gray-500 mb-1"><i class="fas fa-calendar mr-2"></i>Tanggal</p>
                     <p class="font-semibold text-gray-800">{{ $pengaduan->tanggal_kejadian->format('d M Y') }}</p>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-800 mb-3"><i class="fas fa-align-left mr-2"></i>Deskripsi Kejadian</h3>
+                <h3 class="font-semibold text-gray-800 mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</h3>
+                <p class="text-gray-700 mb-3">{{ $pengaduan->lokasi }}</p>
+                <div class="flex items-start text-sm text-gray-600 mb-3">
+                <i class="fas fa-map-pin mr-2 mt-1"></i>
+
+                @if($pengaduan->kategori_utama === 'pengaduan')
+                    <div>
+                        <span>
+                            Koordinat:
+                            {{ $pengaduan->latitude }},
+                            {{ $pengaduan->longitude }}
+                        </span>
+                        <br>
+                        <a  target="_blank"
+                            class="text-blue-600 hover:text-blue-800 inline-flex items-center mt-1"
+                            href="https://www.google.com/maps?q={{ $pengaduan->latitude }},{{ $pengaduan->longitude }}">
+                            <i class="fas fa-external-link-alt mr-1"></i>
+                            Buka di Google Maps
+                        </a>
+                    </div>
+                @else
+                    <div>
+                        <span>
+                            <strong>Titik Awal:</strong><br>
+                            {{ $pengaduan->start_latitude }},
+                            {{ $pengaduan->start_longitude }}
+                        </span>
+                        <br><br>
+                        <span>
+                            <strong>Titik Akhir:</strong><br>
+                            {{ $pengaduan->end_latitude }},
+                            {{ $pengaduan->end_longitude }}
+                        </span>
+                        <br>
+                        <a  target="_blank"
+                            class="text-blue-600 hover:text-blue-800 inline-flex items-center mt-2"
+                            href="https://www.google.com/maps/dir/
+                                {{ $pengaduan->start_latitude }},
+                                {{ $pengaduan->start_longitude }}/
+                                {{ $pengaduan->end_latitude }},
+                                {{ $pengaduan->end_longitude }}">
+                            <i class="fas fa-route mr-1"></i>
+                            Lihat Rute di Google Maps
+                        </a>
+                    </div>
+                @endif
+            </div>
+                
+                <!-- Google Maps Display -->
+                <div id="map" class="w-full h-80 rounded-lg border border-gray-300"></div>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3"><i class="fas fa-align-left mr-2"></i>Deskripsi</h3>
                 <div class="bg-gray-50 p-4 rounded-lg">
-                    <p class="text-gray-700 leading-relaxed">{{ $pengaduan->deskripsi }}</p>
+                   <p class="text-gray-700 leading-relaxed
+                            break-words
+                            overflow-hidden
+                            whitespace-pre-line">
+                        {{ $pengaduan->deskripsi }}
+                    </p>
+
                 </div>
             </div>
 
@@ -67,63 +119,86 @@
             @endif
         </div>
 
-        <!-- Form Update Status -->
+        @php
+            $isSelesai = $pengaduan->status === 'selesai';
+        @endphp
+        <!-- UPDATE -->
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <h3 class="font-semibold text-gray-800 mb-4 text-lg">
+            <h3 class="font-semibold text-lg mb-4">
                 <i class="fas fa-edit mr-2"></i>Update Status & Tanggapan
             </h3>
 
-            <form action="{{ route('petugas.pengaduan.update', $pengaduan) }}" method="POST">
-                @csrf
-                @method('PUT')
-
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-toggle-on mr-2"></i>Status Pengaduan
-                    </label>
-                    <select name="status" required
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
-                        <option value="pending" {{ $pengaduan->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
-                        <option value="diproses" {{ $pengaduan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
-                        <option value="selesai" {{ $pengaduan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                        <option value="ditolak" {{ $pengaduan->status == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
-                    </select>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-comment-alt mr-2"></i>Tanggapan / Catatan
-                    </label>
-                    <textarea name="tanggapan" rows="5"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-                        placeholder="Berikan tanggapan atau catatan untuk pelapor...">{{ old('tanggapan', $pengaduan->tanggapan) }}</textarea>
-                    <p class="text-sm text-gray-500 mt-2">Tanggapan ini akan dilihat oleh pelapor</p>
-                </div>
-
-                <div class="flex space-x-4">
-                    <button type="submit" class="flex-1 gradient-bg text-white py-3 rounded-lg hover:opacity-90 transition font-semibold">
-                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        @if($pengaduan->tanggapan)
-            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-                <h3 class="font-semibold text-blue-900 mb-3 flex items-center">
-                    <i class="fas fa-history mr-2"></i>Tanggapan Sebelumnya
-                </h3>
-                <p class="text-blue-800 leading-relaxed mb-3">{{ $pengaduan->tanggapan }}</p>
-                @if($pengaduan->petugas)
-                    <div class="flex items-center text-sm text-blue-600 pt-3 border-t border-blue-200">
-                        <i class="fas fa-user-shield mr-2"></i>
-                        <span>{{ $pengaduan->petugas->name }}</span>
-                        <span class="mx-2">•</span>
-                        <span>{{ $pengaduan->updated_at->format('d M Y, H:i') }}</span>
+            {{-- INFO JIKA SUDAH SELESAI --}}
+                @if($isSelesai)
+                    <div class="mb-4 bg-green-50 border border-green-200 text-green-800 rounded-lg p-3 text-sm">
+                        <i class="fas fa-lock mr-2"></i>
+                        Pengaduan ini telah <strong>SELESAI</strong> dan tidak dapat diubah kembali.
                     </div>
                 @endif
-            </div>
+
+                <form action="{{ $isSelesai ? '#' : route('petugas.pengaduan.update', $pengaduan) }}"
+                    method="POST">
+                    @csrf
+                    @method('PUT')
+
+        {{-- NAMA PETUGAS --}}
+        <div class="mb-4">
+            <label class="font-semibold">Nama Petugas Penanganan</label>
+            <input type="text"
+                   name="nama_petugas"
+                   value="{{ old('nama_petugas', $pengaduan->nama_petugas) }}"
+                   {{ $isSelesai ? 'disabled' : 'required' }}
+                   class="w-full px-4 py-2 border rounded
+                          {{ $isSelesai ? 'bg-gray-100 cursor-not-allowed' : '' }}">
+        </div>
+
+        {{-- STATUS --}}
+        <div class="mb-4">
+            <label class="font-semibold">Status</label>
+            <select name="status"
+                    {{ $isSelesai ? 'disabled' : '' }}
+                    class="w-full px-4 py-2 border rounded
+                           {{ $isSelesai ? 'bg-gray-100 cursor-not-allowed' : '' }}">
+                <option value="pending" {{ $pengaduan->status == 'pending' ? 'selected' : '' }}>
+                    Menunggu
+                </option>
+                <option value="diproses" {{ $pengaduan->status == 'diproses' ? 'selected' : '' }}>
+                    Diproses
+                </option>
+                <option value="selesai" {{ $pengaduan->status == 'selesai' ? 'selected' : '' }}>
+                    Selesai
+                </option>
+                <option value="ditolak" {{ $pengaduan->status == 'ditolak' ? 'selected' : '' }}>
+                    Ditolak
+                </option>
+            </select>
+        </div>
+
+        {{-- TANGGAPAN --}}
+        <div class="mb-4">
+            <label class="font-semibold">Tanggapan</label>
+            <textarea name="tanggapan"
+                      rows="4"
+                      {{ $isSelesai ? 'disabled' : '' }}
+                      class="w-full px-4 py-2 border rounded
+                             {{ $isSelesai ? 'bg-gray-100 cursor-not-allowed' : '' }}">{{ old('tanggapan', $pengaduan->tanggapan) }}</textarea>
+        </div>
+
+        {{-- BUTTON --}}
+        @if(!$isSelesai)
+            <button type="submit"
+                    class="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700">
+                Simpan Perubahan
+            </button>
+        @else
+            <button type="button"
+                    disabled
+                    class="w-full bg-gray-300 text-gray-600 py-2 rounded cursor-not-allowed">
+                Pengaduan Telah Selesai
+            </button>
         @endif
+    </form>
+        </div>
     </div>
 
     <!-- Sidebar -->
@@ -190,19 +265,151 @@
                         </div>
                     </div>
                 @endif
-            </div>
-        </div>
 
-        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <p class="text-sm text-purple-800 font-semibold mb-2">
-                <i class="fas fa-info-circle mr-2"></i>Catatan Penting
-            </p>
-            <ul class="text-xs text-purple-700 space-y-1">
-                <li>• Prioritas tinggi harus ditangani dalam 24 jam</li>
-                <li>• Selalu berikan tanggapan yang jelas</li>
-                <li>• Update status secara berkala</li>
-            </ul>
+                @if($pengaduan->hasFeedback())
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6 mt-6">
+                    <h3 class="font-semibold text-green-900 mb-3">
+                        📝 Feedback Masyarakat
+                    </h3>
+
+                    <p class="mb-2">
+                        <strong>Rating:</strong>
+                        {{ str_repeat('⭐', $pengaduan->rating) }}
+                        ({{ $pengaduan->rating }}/5)
+                    </p>
+
+                    <p class="text-gray-800 mb-2">
+                        "{{ $pengaduan->feedback }}"
+                    </p>
+
+                    <p class="text-sm text-gray-500">
+                        Diberikan pada {{ $pengaduan->feedback_at->format('d M Y, H:i') }}
+                    </p>
+                </div>
+                @endif
+                            
+            </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const kategori = @json($pengaduan->kategori_utama);
+
+    const lat  = @json($pengaduan->latitude);
+    const lng  = @json($pengaduan->longitude);
+
+    const slat = @json($pengaduan->start_latitude);
+    const slng = @json($pengaduan->start_longitude);
+    const elat = @json($pengaduan->end_latitude);
+    const elng = @json($pengaduan->end_longitude);
+
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    // ===============================
+    // VALIDASI KOORDINAT
+    // ===============================
+    let valid = false;
+
+    if (kategori === 'pengaduan') {
+        valid = lat && lng && !isNaN(lat) && !isNaN(lng);
+    }
+
+    if (kategori === 'permintaan') {
+        valid = slat && slng && elat && elng &&
+                !isNaN(slat) && !isNaN(slng) &&
+                !isNaN(elat) && !isNaN(elng);
+    }
+
+    if (!valid) {
+        mapEl.innerHTML = `
+            <div class="flex items-center justify-center h-full">
+                <p class="text-gray-600">
+                    Koordinat tidak tersedia. Tidak dapat menampilkan peta.
+                </p>
+            </div>`;
+        return;
+    }
+
+    // ===============================
+    // INIT MAP
+    // ===============================
+    const center = kategori === 'permintaan'
+        ? [Number(slat), Number(slng)]
+        : [Number(lat), Number(lng)];
+
+    const map = L.map('map', {
+        center: center,
+        zoom: 15,
+        scrollWheelZoom: true
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // ===============================
+    // MODE PENGADUAN (1 TITIK)
+    // ===============================
+    if (kategori === 'pengaduan') {
+        L.marker([Number(lat), Number(lng)])
+            .addTo(map)
+            .bindPopup('Lokasi')
+            .openPopup();
+    }
+
+    // ===============================
+    // MODE PERMINTAAN (PENGAWALAN)
+    // 2 TITIK + RUTE JALAN
+    // ===============================
+    if (kategori === 'permintaan') {
+        // marker start
+        L.marker([Number(slat), Number(slng)], {
+            icon: L.icon({
+                iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                iconSize: [32, 32]
+            })
+        }).addTo(map).bindPopup('Titik Awal');
+
+        // marker end
+        L.marker([Number(elat), Number(elng)], {
+            icon: L.icon({
+                iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                iconSize: [32, 32]
+            })
+        }).addTo(map).bindPopup('Titik Akhir');
+
+        // routing mengikuti jalan
+        L.Routing.control({
+            waypoints: [
+                L.latLng(Number(slat), Number(slng)),
+                L.latLng(Number(elat), Number(elng))
+            ],
+            router: L.Routing.osrmv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1'
+            }),
+            lineOptions: {
+                styles: [{ color: '#6D28D9', weight: 5 }]
+            },
+            addWaypoints: false,
+            draggableWaypoints: false,
+            fitSelectedRoutes: true,
+            show: false,
+            createMarker: () => null
+        }).addTo(map);
+    }
+
+    L.control.scale().addTo(map);
+});
+</script>
 @endsection
