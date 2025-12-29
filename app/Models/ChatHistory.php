@@ -2,29 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ChatHistory extends Model
 {
+    use HasFactory;
+
     protected $table = 'chat_history';
 
-    public $timestamps = false;
-
     protected $fillable = [
-        'user_id', 'session_id', 'pertanyaan', 'jawaban', 'faq_id'
+        'user_message',
+        'bot_reply'
     ];
-
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function faq()
-    {
-        return $this->belongsTo(Faq::class);
-    }
 }

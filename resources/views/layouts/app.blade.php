@@ -27,6 +27,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
+
     <!-- Navigation -->
     <nav class="gradient-bg shadow-lg">
         <div class="container mx-auto px-4">
@@ -37,10 +38,7 @@
                 </a>
                 
                 <div class="flex items-center space-x-4">
-                    <a href="{{ route('chatbot.index') }}" class="text-white hover:text-gray-200 transition">
-                        <i class="fas fa-comments mr-2"></i>Chatbot
-                    </a>
-                    
+
                     @auth
                         @if(auth()->user()->isPetugas())
                             <a href="{{ route('petugas.dashboard') }}" class="text-white hover:text-gray-200 transition">
