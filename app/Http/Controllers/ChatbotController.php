@@ -44,8 +44,10 @@ class ChatbotController extends Controller
     $reply = $ai->reply($message, $context);
 
     \App\Models\ChatHistory::create([
-        'user_message' => $message,
-        'bot_reply' => $reply
+    'user_message' => $message,
+    'bot_reply' => $reply,
+    'user_id' => auth()->id(),
+    'session_id' => session()->getId(),
     ]);
 
     return response()->json(['reply' => $reply]);

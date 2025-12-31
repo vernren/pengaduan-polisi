@@ -16,6 +16,36 @@
             if (phoneInput.value) {
                 phoneHidden.value = '+62' + phoneInput.value;
             }
+
+            // Preview gambar
+            const fotoIdentitasInput = document.getElementById('foto_identitas');
+            const fotoSelfieInput = document.getElementById('foto_selfie');
+            const previewIdentitas = document.getElementById('preview_identitas');
+            const previewSelfie = document.getElementById('preview_selfie');
+
+            fotoIdentitasInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewIdentitas.src = e.target.result;
+                        previewIdentitas.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            fotoSelfieInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewSelfie.src = e.target.result;
+                        previewSelfie.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         });
     </script>
 @endsection
@@ -97,17 +127,38 @@
                         placeholder="Jl. Contoh No. 123, Jakarta">{{ old('address') }}</textarea>
                 </div>
 
+                {{-- FOTO IDENTITAS --}}
                 <div class="mb-4">
                     <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-camera mr-2"></i>Foto Identitas & Selfie
+                        <i class="fas fa-id-card mr-2"></i>Foto Identitas (KTP/SIM)
                     </label>
 
-                    <input type="file" name="foto" accept="image/*" capture="environment" required
+                    <input type="file" id="foto_identitas" name="foto_identitas" accept="image/*" capture="environment" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 bg-white">
 
                     <p class="text-sm text-gray-500 mt-1">
-                        Ambil foto langsung dari kamera atau pilih dari galeri
+                        Foto kartu identitas (KTP/SIM) yang jelas dan dapat terbaca
                     </p>
+
+                    {{-- Preview Identitas --}}
+                    <img id="preview_identitas" class="hidden mt-3 max-w-xs rounded-lg border border-gray-300" alt="Preview Identitas">
+                </div>
+
+                {{-- FOTO SELFIE --}}
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">
+                        <i class="fas fa-camera mr-2"></i>Foto Selfie dengan Identitas
+                    </label>
+
+                    <input type="file" id="foto_selfie" name="foto_selfie" accept="image/*" capture="user" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 bg-white">
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Foto selfie Anda sambil memegang kartu identitas di samping wajah
+                    </p>
+
+                    {{-- Preview Selfie --}}
+                    <img id="preview_selfie" class="hidden mt-3 max-w-xs rounded-lg border border-gray-300" alt="Preview Selfie">
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-4 mb-6">

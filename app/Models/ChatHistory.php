@@ -13,6 +13,8 @@ class ChatHistory extends Model
 
     protected $fillable = [
         'user_message',
-        'bot_reply'
+        'bot_reply',
     ];
+
+    public $timestamps = true;
 }

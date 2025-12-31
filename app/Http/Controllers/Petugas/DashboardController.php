@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
-        
+
         $status = $request->query('status', 'all');
         $validStatuses = ['pending', 'diproses', 'selesai', 'ditolak'];
 
@@ -25,11 +25,30 @@ class DashboardController extends Controller
 
         $query = Pengaduan::with('user', 'foto')->latest();
 
+        // Filter kategori utama
+        if ($request->kategori_utama) {
+            $query->where('kategori_utama', $request->kategori_utama);
+        }
+
+        // Filter sub kategori
+        if ($request->sub_kategori) {
+            $query->where('sub_kategori', $request->sub_kategori);
+        }
+
         if ($status !== 'all' && in_array($status, $validStatuses)) {
             $query->where('status', $status);
         }
 
         $pengaduan = $query->paginate(15)->withQueryString();
+
+        // Data untuk dropdown
+        $kategoriUtamaList = Pengaduan::select('kategori_utama')
+            ->distinct()
+            ->pluck('kategori_utama');
+
+        $subKategoriList = Pengaduan::select('sub_kategori')
+            ->distinct()
+            ->pluck('sub_kategori');
 
         return view('petugas.dashboard', compact('stats', 'pengaduan'));
     }

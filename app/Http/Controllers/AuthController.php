@@ -50,14 +50,13 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
             'address' => 'required|string',
             'nik' => 'required|string|size:16|unique:users',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:5120',
+            'foto_identitas' => 'required|image|mimes:jpg,jpeg,png|max:5120',
+            'foto_selfie' => 'required|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
-        $fotoPath = null;
+        $fotoIdentitasPath = $request->file('foto_identitas')->store('foto_user', 'public');
 
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('foto_user', 'public');
-        }
+        $fotoSelfiePath = $request->file('foto_selfie')->store('foto_user', 'public');
 
         $user = User::create([
             'name' => $validated['name'],
@@ -66,7 +65,8 @@ class AuthController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'nik' => $validated['nik'],
-            'foto' => $fotoPath,
+            'foto_identitas' => $fotoIdentitasPath,
+            'foto_selfie' => $fotoSelfiePath,
             'role' => 'masyarakat',
         ]);
 

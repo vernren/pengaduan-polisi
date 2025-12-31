@@ -11,6 +11,7 @@ class PoliceGeminiService
 
     public function __construct()
     {
+
         $this->apiKey = config('services.gemini.key');
 
         // ✅ MODEL YANG AKTIF & GRATIS

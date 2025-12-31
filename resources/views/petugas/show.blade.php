@@ -225,8 +225,8 @@
                     </div>
                     <div>
                         <p class="text-gray-500 mb-1">Foto Pelapor</p>
-                        @if ($pengaduan->user->foto)
-                            <img src="{{ Storage::url($pengaduan->user->foto) }}" class="w-40 rounded">
+                        @if ($pengaduan->user->foto_selfie)
+                            <img src="{{ Storage::url($pengaduan->user->foto_selfie) }}" class="w-40 rounded">
                         @endif
                     </div>
                 </div>
