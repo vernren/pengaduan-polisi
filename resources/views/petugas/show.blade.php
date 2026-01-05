@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-6">
-        <a href="{{ route('petugas.dashboard') }}" class="text-purple-600 hover:text-purple-800">
+        <a href="{{ route('petugas.dashboard') }}" class="text-gray-600 hover:text-gray-800">
             <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
         </a>
     </div>
@@ -108,7 +108,7 @@
                             @foreach ($pengaduan->foto as $foto)
                                 <a href="{{ Storage::url($foto->file_path) }}" target="_blank" class="group relative">
                                     <img src="{{ Storage::url($foto->file_path) }}" alt="Bukti"
-                                        class="w-full h-48 object-cover rounded-lg border-2 border-gray-300 group-hover:border-purple-500 transition">
+                                        class="w-full h-48 object-cover rounded-lg border-2 border-gray-300 group-hover:border-gray-500 transition">
                                     <div
                                         class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition rounded-lg flex items-center justify-center">
                                         <i
@@ -183,7 +183,7 @@
 
                     {{-- BUTTON --}}
                     @if (!$isSelesai)
-                        <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700">
+                        <button type="submit" class="w-full bg-gray-600 text-white py-2 rounded hover:bg-gray-700">
                             Simpan Perubahan
                         </button>
                     @else

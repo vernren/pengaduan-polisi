@@ -23,6 +23,15 @@ class DashboardController extends Controller
             'total'    => Pengaduan::count(),
         ];
 
+$request->validate([
+    'tanggal_mulai'   => 'nullable|date',
+    'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
+], [
+    'tanggal_selesai.after_or_equal' => 
+        'Tanggal selesai tidak boleh lebih kecil dari tanggal mulai.',
+]);
+
+
         $query = Pengaduan::with('user', 'foto')->latest();
 
         // Filter kategori utama
@@ -38,6 +47,15 @@ class DashboardController extends Controller
         if ($status !== 'all' && in_array($status, $validStatuses)) {
             $query->where('status', $status);
         }
+
+        if ($request->filled('tanggal_mulai')) {
+            $query->whereDate('created_at', '>=', $request->tanggal_mulai);
+        }
+
+        if ($request->filled('tanggal_selesai')) {
+            $query->whereDate('created_at', '<=', $request->tanggal_selesai);
+        }
+
 
         $pengaduan = $query->paginate(15)->withQueryString();
 

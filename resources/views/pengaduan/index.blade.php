@@ -22,7 +22,7 @@
     @else
         <div class="space-y-4">
             @foreach($pengaduan as $item)
-                <div class="border border-gray-200 rounded-lg p-5 hover:border-purple-300 transition">
+                <div class="border border-gray-200 rounded-lg p-5 hover:border-gray-300 transition">
                     <div class="flex justify-between items-start mb-3">
                         <div class="flex-1">
                             <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $item->judul }}</h3>
@@ -42,7 +42,7 @@
                             <span class="px-4 py-2 rounded-full text-sm font-semibold {{ $item->getStatusBadgeClass() }} block mb-2">
                                 {{ $item->getStatusLabel() }}
                             </span>
-                            <a href="{{ route('pengaduan.show', $item) }}" class="text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                            <a href="{{ route('pengaduan.show', $item) }}" class="text-gray-600 hover:text-gray-800 font-semibold text-sm">
                                 Lihat Detail <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>

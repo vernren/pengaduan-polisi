@@ -8,7 +8,7 @@
 
 <div class="max-w-3xl mx-auto">
     <div class="mb-6">
-        <a href="{{ route('dashboard') }}" class="text-purple-600 hover:text-purple-800">
+        <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-gray-800">
             ← Kembali
         </a>
     </div>
@@ -136,7 +136,7 @@
             </div>
 
             <button type="submit"
-                class="w-full bg-purple-600 text-white py-3 rounded font-semibold">
+                class="w-full bg-gray-600 text-white py-3 rounded font-semibold hover:bg-gray-700">
                 Kirim Pengaduan
             </button>
         </form>

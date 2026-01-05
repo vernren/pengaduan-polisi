@@ -6,8 +6,8 @@
 
     <script>
         /* =========================
-       SUB KATEGORI FILTER
-    ========================= */
+               SUB KATEGORI FILTER
+            ========================= */
         const filterSubKategoriOptions = {
             pengaduan: {
                 pencurian: 'Pencurian',
@@ -104,15 +104,15 @@
             <p class="text-xs text-green-100 mt-3">Telah diselesaikan</p>
         </div>
 
-        <div class="bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+        <div class="bg-gradient-to-br from-gray-400 to-gray-600 rounded-lg shadow-lg p-6 text-white">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-purple-100 text-sm font-semibold">Total</p>
+                    <p class="text-gray-100 text-sm font-semibold">Total</p>
                     <p class="text-4xl font-bold mt-2">{{ $stats['total'] }}</p>
                 </div>
                 <i class="fas fa-file-alt text-5xl opacity-30"></i>
             </div>
-            <p class="text-xs text-purple-100 mt-3">Semua laporan</p>
+            <p class="text-xs text-gray-100 mt-3">Semua laporan</p>
         </div>
     </div>
 
@@ -120,7 +120,7 @@
     <div class="bg-white rounded-lg shadow-lg mb-6 overflow-x-auto">
         <div class="flex border-b border-gray-200 whitespace-nowrap">
             <a href="?status=all"
-                class="px-6 py-4 font-semibold {{ request('status', 'all') == 'all' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600 hover:text-purple-600' }}">
+                class="px-6 py-4 font-semibold {{ request('status', 'all') == 'all' ? 'text-gray-600 border-b-2 border-gray-600' : 'text-gray-600 hover:text-gray-600' }}">
                 Semua
             </a>
             <a href="?status=pending"
@@ -140,48 +140,76 @@
 
     <!-- laporan List -->
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-<div class="p-6 border-b border-gray-200">
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">
-            <i class="fas fa-list mr-2"></i>Daftar Laporan
-        </h2>
-        <span class="text-sm font-semibold text-gray-600">
-            Total Laporan : 
-            <span class="text-purple-600 font-bold">
-                {{ $pengaduan->total() }}
-            </span>
-        </span>
-    </div>
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-list mr-2"></i>Daftar Laporan
+                </h2>
+                <span class="text-sm font-semibold text-gray-600">
+                    Total Laporan :
+                    <span class="text-gray-600 font-bold">
+                        {{ $pengaduan->total() }}
+                    </span>
+                </span>
+            </div>
 
-    <!-- Filter Kategori -->
-    <form method="GET" class="flex flex-wrap gap-4 items-end">
-        {{-- KATEGORI UTAMA --}}
-        <div>
-            <label class="block text-sm font-semibold mb-1">Kategori Utama</label>
-            <select name="kategori_utama" id="filter_kategori" class="px-4 py-2 border rounded-lg">
-                <option value="">Semua</option>
-                <option value="pengaduan" {{ request('kategori_utama') == 'pengaduan' ? 'selected' : '' }}>
-                    Pengaduan
-                </option>
-                <option value="permintaan" {{ request('kategori_utama') == 'permintaan' ? 'selected' : '' }}>
-                    Pengawalan
-                </option>
-            </select>
+            <!-- Filter Kategori -->
+            <form method="GET" class="flex flex-wrap gap-4 items-end">
+                {{-- KATEGORI UTAMA --}}
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Kategori Utama</label>
+                    <select name="kategori_utama" id="filter_kategori" class="px-4 py-2 border rounded-lg">
+                        <option value="">Semua</option>
+                        <option value="pengaduan" {{ request('kategori_utama') == 'pengaduan' ? 'selected' : '' }}>
+                            Pengaduan
+                        </option>
+                        <option value="permintaan" {{ request('kategori_utama') == 'permintaan' ? 'selected' : '' }}>
+                            Pengawalan
+                        </option>
+                    </select>
+                </div>
+
+                {{-- SUB KATEGORI --}}
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Sub Kategori</label>
+                    <select name="sub_kategori" id="filter_sub_kategori" class="px-4 py-2 border rounded-lg">
+                        <option value="">Semua</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Tanggal Mulai</label>
+                    <input type="date" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}"
+                        class="px-4 py-2 border rounded-lg w-full
+        @error('tanggal_mulai') border-red-500 @enderror">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Tanggal Selesai</label>
+                    <input type="date" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}"
+                        class="px-4 py-2 border rounded-lg w-full
+        @error('tanggal_selesai') border-red-500 @enderror">
+
+                    {{-- ERROR MESSAGE --}}
+                    @error('tanggal_selesai')
+                        <p class="text-sm text-red-600 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+
+
+                <button class="bg-gray-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-gray-700">
+                    Terapkan
+                </button>
+
+                <button class="bg-red-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-red-700">
+                    <a href="{{ route('petugas.dashboard') }}" class="text-white hover:text-gray-200 transition">
+                        Reset
+                    </a>
+                </button>
+            </form>
         </div>
-
-        {{-- SUB KATEGORI --}}
-        <div>
-            <label class="block text-sm font-semibold mb-1">Sub Kategori</label>
-            <select name="sub_kategori" id="filter_sub_kategori" class="px-4 py-2 border rounded-lg">
-                <option value="">Semua</option>
-            </select>
-        </div>
-
-        <button class="bg-purple-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-purple-700">
-            Terapkan
-        </button>
-    </form>
-</div>
 
         @if ($pengaduan->isEmpty())
             <div class="text-center py-12">
@@ -234,7 +262,7 @@
                             <!-- RIGHT -->
                             <div class="flex flex-col sm:flex-row gap-2 shrink-0">
                                 <a href="{{ route('petugas.pengaduan.show', $item) }}"
-                                    class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 whitespace-nowrap">
+                                    class="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-700 whitespace-nowrap">
                                     <i class="fas fa-eye mr-1"></i>Lihat Detail
                                 </a>
 

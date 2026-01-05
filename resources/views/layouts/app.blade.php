@@ -25,55 +25,84 @@
             }
         }
     </style>
+    
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 min-h-screen flex flex-col">
 
-    <!-- Navigation -->
-    <nav class="gradient-bg shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                    <i class="fas fa-shield-alt text-white text-2xl"></i>
-                    <span class="text-white font-bold text-xl">Pengaduan Polisi</span>
-                </a>
-                
-                <div class="flex items-center space-x-4">
+<!-- Navigation -->
+<nav id="navbar" class="bg-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+            <a href="{{ route('home') }}" class="flex items-center space-x-2">
+                <img src="/storage/logoPolda.png" alt="Logo Polisi" class="w-10">
+                <span class="text-white font-bold text-xl">Pengaduan Polisi</span>
+            </a>
+            
+            <div class="flex items-center space-x-4">
 
-                    @auth
-                        @if(auth()->user()->isPetugas())
-                            <a href="{{ route('petugas.dashboard') }}" class="text-white hover:text-gray-200 transition">
-                                <i class="fas fa-user-shield mr-2"></i>Dashboard Petugas
-                            </a>
-                        @else
-                            <a href="{{ route('dashboard') }}" class="text-white hover:text-gray-200 transition">
-                                <i class="fas fa-home mr-2"></i>Dashboard
-                            </a>
-                            <a href="{{ route('pengaduan.create') }}" class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
-                                <i class="fas fa-plus mr-2"></i>Buat Pengaduan
-                            </a>
-                        @endif
-                        
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="text-white hover:text-gray-200 transition">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Keluar
-                            </button>
-                        </form>
+                @auth
+                    @if(auth()->user()->isPetugas())
+                        <a href="{{ route('petugas.dashboard') }}" class="text-white hover:text-gray-200 transition">
+                            <i class="fas fa-user-shield mr-2"></i>Dashboard Petugas
+                        </a>
                     @else
-                        <a href="{{ route('login') }}" class="text-white hover:text-gray-200 transition">
-                            <i class="fas fa-sign-in-alt mr-2"></i>Masuk
+                        <a href="{{ route('dashboard') }}" class="text-white hover:text-gray-200 transition">
+                            <i class="fas fa-home mr-2"></i>Dashboard
                         </a>
-                        <a href="{{ route('register') }}" class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
-                            Daftar
+                        <a href="{{ route('pengaduan.create') }}" class="bg-white text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
+                            <i class="fas fa-plus mr-2"></i>Buat Pengaduan
                         </a>
-                    @endauth
-                </div>
+                    @endif
+                    
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="text-white hover:text-gray-200 transition">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Keluar
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="text-white hover:text-gray-200 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Masuk
+                    </a>
+                    <a href="{{ route('register') }}" class="bg-white text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
+                        Daftar
+                    </a>
+                @endauth
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
+
+<!-- Spacer untuk mencegah content tertutup navbar -->
+<div class="h-20"></div>
+
+<script>
+    let lastScrollTop = 0;
+    const navbar = document.getElementById('navbar');
+    const delta = 5; // Minimum scroll distance untuk trigger
+    
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Pastikan scroll lebih dari delta pixels untuk menghindari jitter
+        if (Math.abs(lastScrollTop - scrollTop) <= delta) {
+            return;
+        }
+        
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            // Scroll ke bawah & sudah melewati 100px
+            navbar.style.transform = 'translateY(-100%)';
+        } else {
+            // Scroll ke atas
+            navbar.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+</script>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 flex-grow">
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                 <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
@@ -90,7 +119,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="gradient-bg text-white mt-12 py-6">
+    <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2025 Pengaduan Polisi. Melayani dengan Integritas.</p>
             <p class="text-sm mt-2">Nomor Darurat: <strong>110</strong></p>

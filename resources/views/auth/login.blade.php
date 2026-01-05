@@ -6,7 +6,7 @@
 <div class="max-w-md mx-auto">
     <div class="bg-white rounded-lg shadow-lg p-8">
         <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">
-            <i class="fas fa-sign-in-alt text-purple-600 mr-2"></i>Masuk ke Akun
+            <i class="fas fa-sign-in-alt text-gray-800 mr-2"></i>Masuk ke Akun
         </h2>
 
         @if($errors->any())
@@ -45,19 +45,19 @@
                 </label>
             </div>
 
-            <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg hover:opacity-90 transition font-semibold">
+            <button type="submit" class="w-full bg-gray-800 text-white py-3 rounded-lg hover:opacity-90 transition font-semibold">
                 <i class="fas fa-sign-in-alt mr-2"></i>Masuk
             </button>
         </form>
 
         <p class="text-center mt-6 text-gray-600">
             Belum punya akun? 
-            <a href="{{ route('register') }}" class="text-purple-600 hover:text-purple-800 font-semibold">Daftar di sini</a>
+            <a href="{{ route('register') }}" class="text-yellow-400 hover:text-yellow-800 font-semibold">Daftar di sini</a>
         </p>
 
         <div class="mt-6 pt-6 border-t border-gray-200 text-center">
             <p class="text-sm text-gray-600">
-                <i class="fas fa-user-shield text-purple-600 mr-2"></i>
+                <i class="fas fa-user-shield text-yellow-400 mr-2"></i>
                 Login Petugas: <strong>admin@polisi.id</strong> / password
             </p>
         </div>

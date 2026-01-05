@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="mb-6">
-    <a href="{{ auth()->user()->isPetugas() ? route('petugas.dashboard') : route('dashboard') }}" class="text-purple-600 hover:text-purple-800">
+    <a href="{{ auth()->user()->isPetugas() ? route('petugas.dashboard') : route('dashboard') }}" class="text-gray-600 hover:text-gray-800">
         <i class="fas fa-arrow-left mr-2"></i>Kembali
     </a>
 </div>
@@ -66,7 +66,7 @@
                         @foreach($pengaduan->foto as $foto)
                             <a href="{{ Storage::url($foto->file_path) }}" target="_blank" class="group">
                                 <img src="{{ Storage::url($foto->file_path) }}" alt="Bukti" 
-                                    class="w-full h-40 object-cover rounded-lg border border-gray-300 group-hover:border-purple-500 transition">
+                                    class="w-full h-40 object-cover rounded-lg border border-gray-300 group-hover:border-gray-500 transition">
                             </a>
                         @endforeach
                     </div>
@@ -250,7 +250,7 @@
                 </button>
 
                 <button type="submit"
-                        class="px-4 py-2 bg-purple-600 text-white rounded">
+                        class="px-4 py-2 bg-gray-600 text-white rounded">
                     Kirim Feedback
                 </button>
             </div>
