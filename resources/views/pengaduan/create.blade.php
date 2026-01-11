@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Pengaduan - Pengaduan Polisi')
+@section('title', 'Buat Laporan - Pengaduan Polisi')
 
 @section('content')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-bold mb-6">Buat Pengaduan Baru</h2>
+        <h2 class="text-2xl font-bold mb-6">Buat Laporan Baru</h2>
 
         @if($errors->any())
             <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
@@ -31,7 +31,7 @@
 
             {{-- JUDUL --}}
             <div class="mb-4">
-                <label class="font-semibold">Judul Pengaduan *</label>
+                <label class="font-semibold">Judul Laporan *</label>
                 <input type="text" name="judul" required
                     class="w-full border px-3 py-2 rounded"
                     placeholder="Contoh: Permintaan Pengawalan Acara">
@@ -137,7 +137,7 @@
 
             <button type="submit"
                 class="w-full bg-gray-600 text-white py-3 rounded font-semibold hover:bg-gray-700">
-                Kirim Pengaduan
+                Kirim Laporan
             </button>
         </form>
     </div>

@@ -167,9 +167,6 @@
                             <option value="selesai" {{ $pengaduan->status == 'selesai' ? 'selected' : '' }}>
                                 Selesai
                             </option>
-                            <option value="ditolak" {{ $pengaduan->status == 'ditolak' ? 'selected' : '' }}>
-                                Ditolak
-                            </option>
                         </select>
                     </div>
 
@@ -280,9 +277,10 @@
                                 ({{ $pengaduan->rating }}/5)
                             </p>
 
-                            <p class="text-gray-800 mb-2">
+                            <p class="text-gray-800 mb-2 break-words whitespace-normal">
                                 "{{ $pengaduan->feedback }}"
                             </p>
+
 
                             <p class="text-sm text-gray-500">
                                 Diberikan pada {{ $pengaduan->feedback_at->format('d M Y, H:i') }}
