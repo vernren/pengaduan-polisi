@@ -55,6 +55,11 @@ Route::middleware(['auth', 'petugas'])->prefix('petugas')->name('petugas.')->gro
      Route::delete('/pengaduan/{pengaduan}', [PetugasDashboardController::class, 'destroy'])->name('pengaduan.destroy');
 });
 
+Route::get('/petugas/laporan/download', 
+    [App\Http\Controllers\Petugas\LaporanController::class, 'download']
+)->name('petugas.laporan.download');
+
+
 // Route::get('/debug-gemini', function (
 //     \App\Services\PoliceGeminiService $ai
 // ) {

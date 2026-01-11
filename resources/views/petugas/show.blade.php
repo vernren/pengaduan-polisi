@@ -119,6 +119,48 @@
                         </div>
                     </div>
                 @endif
+
+{{-- DOKUMEN PENDUKUNG (PERMINTAAN) --}}
+@if ($pengaduan->dokumen->count() > 0)
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-file-alt mr-2"></i>
+            Dokumen Pendukung ({{ $pengaduan->dokumen->count() }})
+        </h3>
+
+        <div class="space-y-3">
+            @foreach ($pengaduan->dokumen as $index => $dokumen)
+                <div
+                    class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg p-4 hover:bg-gray-100 transition">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-file-pdf text-indigo-600"></i>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-gray-800 text-sm">
+                                Dokumen {{ $index + 1 }}
+                            </p>
+                            <p class="text-xs text-gray-500 break-all">
+                                {{ basename($dokumen->file_path) }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <a href="{{ Storage::url($dokumen->file_path) }}"
+                       target="_blank"
+                       class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition">
+                        <i class="fas fa-download mr-2"></i>
+                        Download
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
+
+
             </div>
 
             @php

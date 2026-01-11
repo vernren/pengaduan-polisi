@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DokumenPengaduan;
 use App\Models\Pengaduan;
 use App\Models\FotoPengaduan;
 use Illuminate\Http\Request;
@@ -33,9 +34,10 @@ class PengaduanController extends Controller
         $baseRules = [
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string|min:50',
-            'kategori_utama' => 'required|in:pengaduan,permintaan',
+            'kategori_utama' => 'required|in:laporan,permintaan',
             'sub_kategori' => 'required|string|max:100',
             'foto.*' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+            'dokumen.*' => 'nullable|file|mimes:pdf,doc,docx|max:4096',
         ];
 
         /**
@@ -43,7 +45,7 @@ class PengaduanController extends Controller
          * VALIDASI TANGGAL
          * =========================
          */
-        if ($request->kategori_utama === 'pengaduan') {
+        if ($request->kategori_utama === 'laporan') {
             $baseRules['tanggal_kejadian'] = 'required|date|before_or_equal:today';
         } else {
             $baseRules['tanggal_kejadian'] = 'required|date';
@@ -54,7 +56,7 @@ class PengaduanController extends Controller
          * VALIDASI LOKASI
          * =========================
          */
-        if ($request->kategori_utama === 'pengaduan') {
+        if ($request->kategori_utama === 'laporan') {
             $baseRules['lokasi'] = 'required|string|max:500';
             $baseRules['latitude'] = 'required|numeric|between:-90,90';
             $baseRules['longitude'] = 'required|numeric|between:-180,180';
@@ -65,6 +67,10 @@ class PengaduanController extends Controller
             $baseRules['start_longitude'] = 'required|numeric|between:-180,180';
             $baseRules['end_latitude'] = 'required|numeric|between:-90,90';
             $baseRules['end_longitude'] = 'required|numeric|between:-180,180';
+        }
+
+        if ($request->kategori_utama === 'permintaan') {
+            $baseRules['dokumen'] = 'required|array|min:1';
         }
 
         $validated = $request->validate($baseRules);
@@ -97,7 +103,7 @@ class PengaduanController extends Controller
             'status' => 'pending',
         ];
 
-        if ($validated['kategori_utama'] === 'pengaduan') {
+        if ($validated['kategori_utama'] === 'laporan') {
             $pengaduanData['lokasi'] = $validated['lokasi'];
             $pengaduanData['latitude'] = $validated['latitude'];
             $pengaduanData['longitude'] = $validated['longitude'];
@@ -128,6 +134,23 @@ class PengaduanController extends Controller
             }
         }
 
+        /**
+ * =========================
+ * SIMPAN DOKUMEN (PERMINTAAN)
+ * =========================
+ */
+if ($request->hasFile('dokumen')) {
+    foreach ($request->file('dokumen') as $dokumen) {
+        $path = $dokumen->store('dokumen_pengaduan', 'public');
+
+        DokumenPengaduan::create([
+            'pengaduan_id' => $pengaduan->id,
+            'file_path' => $path,
+            'keterangan' => null,
+        ]);
+    }
+}
+
         return redirect()->route('pengaduan.index')
             ->with('success', 'Pengaduan berhasil dibuat!');
     }
@@ -156,7 +179,7 @@ class PengaduanController extends Controller
 
         // hanya jika sudah selesai
         if ($pengaduan->status !== 'selesai') {
-            return back()->with('error', 'Feedback hanya dapat diberikan jika pengaduan telah selesai.');
+            return back()->with('error', 'Feedback hanya dapat diberikan jika laporan telah selesai ditangani.');
         }
 
         // tidak boleh isi dua kali

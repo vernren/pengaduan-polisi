@@ -67,8 +67,8 @@ class Pengaduan extends Model
     public static function getKategoriOptions()
     {
         return [
-            'pengaduan' => [
-                'label' => 'Pengaduan',
+            'laporan' => [
+                'label' => 'Laporan',
                 'sub' => [
                     'kecelakaan_lalu_lintas' => 'Kecelakaan Lalu Lintas',
                     'pencurian' => 'Pencurian',
@@ -110,6 +110,11 @@ class Pengaduan extends Model
     public function foto()
     {
         return $this->hasMany(FotoPengaduan::class);
+    }
+
+    public function dokumen()
+    {
+        return $this->hasMany(DokumenPengaduan::class);
     }
 
     /**
@@ -186,12 +191,12 @@ class Pengaduan extends Model
      */
 
     // apakah pengaduan sudah bisa diberi feedback
-public function canGiveFeedback()
-{
-    return $this->status === 'selesai'
-        && is_null($this->feedback)
-        && is_null($this->rating);
-}
+    public function canGiveFeedback()
+    {
+        return $this->status === 'selesai'
+            && is_null($this->feedback)
+            && is_null($this->rating);
+    }
 
 
     // apakah pengaduan sudah ada feedback
